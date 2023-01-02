@@ -10,7 +10,7 @@ class PlainStudentSchema(Schema):
     fname = fields.Str(required=True)
     lname = fields.Str(required=True)
 
-class StudentSchema(PlainTeacherSchema):
+class StudentSchema(PlainStudentSchema):
     teacher_id = fields.Int(required=True, load_only=True)
     teacher = fields.Nested(PlainTeacherSchema(),dump_only=True)
 

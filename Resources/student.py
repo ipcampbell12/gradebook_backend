@@ -20,6 +20,10 @@ class Student(MethodView):
 
 @blp.route('/student')
 class StudentList(MethodView):
+    
+    @blp.response(200,StudentSchema(many=True))
+    def get(self):
+        return StudentModel.query.all()
 
     @blp.arguments(StudentSchema)
     @blp.response(200,StudentSchema)
@@ -30,6 +34,7 @@ class StudentList(MethodView):
         try:
             db.session.add(student)
             db.session.commit()
+            print(student)
         except SQLAlchemyError:
             abort(500, "There was an error adding this student")
         
