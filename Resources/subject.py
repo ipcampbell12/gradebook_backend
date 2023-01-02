@@ -14,22 +14,24 @@ blp = Blueprint("SubjectModel",__name__,description="Operations on subjects")
 class Subject(MethodView):
 
     @blp.response(200, SubjectSchema)
-    def get(self,assessment_id):
-        assessment = SubjectModel.query.get_or_404(assessment_id)
-        return assessment
+    def get(self,subject_id):
+        subject = SubjectModel.query.get_or_404(subject_id)
+        return subject
 
 class SubjectList(MethodView):
 
     @blp.arguments(SubjectSchema)
     @blp.response(200, SubjectSchema)
-    def post(self,assessment_data):
+    def post(self,subject_data):
 
-        assessment = SubjectModel(**assessment_data)
+        subject = SubjectModel(**subject_data)
 
         try:
-            db.session.add(assessment)
+            db.session.add(subject)
             db.session.commit()
+        except IntegrityError:
+            abort(400, "A subject with this name already exists")
         except SQLAlchemyError:
-            abort(500, "We could not add this assessment")
+            abort(500, "We could not add this subject")
 
-        return assessment
+        return subject

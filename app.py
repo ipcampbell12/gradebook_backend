@@ -4,7 +4,7 @@ from Resources.teacher import blp as TeacherBlueprint
 from Resources.student import blp as StudentBlueprint
 from Resources.assessment import blp as AssessmentBlueprint
 from Resources.subject import blp as SubjectBlueprint
-from logging import FileHandler,WARNING
+
 import Models 
 from db import db
 
@@ -12,8 +12,7 @@ from db import db
 # takes a configurationa and file and creates a new app
 def create_app(Config):
     app = Flask(__name__)
-    file_handler = FileHandler('errorlog.txt')
-    file_handler.setLevel(WARNING)
+
     
     app.config.from_object(Config)
 
