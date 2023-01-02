@@ -1,7 +1,6 @@
 from flask import request
 from flask_smorest import Blueprint,abort
 from flask.views import MethodView
-from db import teachers
 from schemas import TeacherSchema
 
 blp = Blueprint("Teachers",__name__,description="Operations on teachers")
@@ -22,7 +21,7 @@ class Teacher(MethodView):
         except KeyError: 
             abort(404,"Teacher not found")
 
-@blp.rote('/teacher')
+@blp.route('/teacher')
 class TeachersList(MethodView):
     
     def get(self):
