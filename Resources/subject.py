@@ -10,7 +10,7 @@ from schemas import SubjectSchema
 
 blp = Blueprint("SubjectModel",__name__,description="Operations on subjects")
 
-@blp.route("/subject/<string:subjuect_id>")
+@blp.route("/subject/<string:subject_id>")
 class Subject(MethodView):
 
     @blp.response(200, SubjectSchema)
@@ -18,8 +18,13 @@ class Subject(MethodView):
         subject = SubjectModel.query.get_or_404(subject_id)
         return subject
 
+@blp.route("/subject")
 class SubjectList(MethodView):
 
+    @blp.response(200,SubjectSchema(many=True))
+    def get(self):
+        return SubjectModel.query.all()
+        
     @blp.arguments(SubjectSchema)
     @blp.response(200, SubjectSchema)
     def post(self,subject_data):
@@ -27,6 +32,7 @@ class SubjectList(MethodView):
         subject = SubjectModel(**subject_data)
 
         try:
+
             db.session.add(subject)
             db.session.commit()
         except IntegrityError:

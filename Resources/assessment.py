@@ -20,6 +20,10 @@ class Assessment(MethodView):
 
 class AsessmentList(MethodView):
 
+    @blp.response(200,AssessmentSchema(many=True))
+    def get(self):
+        return AssessmentModel.query.all()
+
     @blp.arguments(AssessmentSchema)
     @blp.response(200,AssessmentSchema)
     def post(self,assessment_data):
