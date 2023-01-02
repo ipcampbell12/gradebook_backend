@@ -5,24 +5,23 @@ from schemas import TeacherSchema
 
 from db import db
 from Models import TeacherModel
+from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 
 blp = Blueprint("Teachers",__name__,description="Operations on teachers")
 
 @blp.route('/teacher/<string:teacher_id>')
 class Teacher(MethodView):
 
+    @blp.response(200,TeacherSchema)
     def get(self,teacher_id):
-        try:
-            return teachers[teacher_id]
-        except: 
-            abort(404, message="Teacher not found")
+        teacher = TeacherModel.query.get_or_404(teacher_id)
+        return teacher 
+
     
     def delete(self, teacher_id):
-        try:
-            del teachers[teacher_id]
-            return {"message":"Teacher deleted"}
-        except KeyError: 
-            abort(404,"Teacher not found")
+        teacher = TeacherModel.query.get_or_404(teacher_id)
+        raise NotImplementedError("Deleting a teacher has not been implemented yet")
+
 
 @blp.route('/teacher')
 class TeachersList(MethodView):
@@ -34,9 +33,15 @@ class TeachersList(MethodView):
     @blp.response(200,TeacherSchema)
     def post(self, teacher_data):
         
-        teacher_id=teachers.values().length+1
+        teacher = TeacherModel(**teacher_data)
 
-        teacher = {**teacher_data,"id":teacher_id}
-        teachers[teacher_id] = teacher 
+        try: 
+            db.session.add(teacher)
+            db.session.commit()
+        except IntegrityError:
+            abort(400, "A teacher with this name already exists")
+        except SQLAlchemyError:
+            abort(500, "There was an error when adding this teacher")
+
         return teacher, 201
  
