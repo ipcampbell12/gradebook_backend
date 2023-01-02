@@ -2,6 +2,8 @@ from flask import Flask
 from flask_smorest import Api
 from Resources.teacher import blp as TeacherBlueprint
 from Resources.student import blp as StudentBlueprint
+from Resources.assessment import blp as AssessmentBlueprint
+from Resources.subject import blp as SubjectBlueprint
 from logging import FileHandler,WARNING
 import Models 
 from db import db
@@ -25,6 +27,8 @@ def create_app(Config):
 
     api.register_blueprint(TeacherBlueprint)
     api.register_blueprint(StudentBlueprint)
+    api.register_blueprint(AssessmentBlueprint)
+    api.register_blueprint(SubjectBlueprint)
 
     return app
 

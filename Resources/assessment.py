@@ -12,11 +12,16 @@ blp = Blueprint("Assessments",__name__,description="Operations on assessments")
 
 @blp.route("/assessments/<string:assessment_id>")
 class Assessment(MethodView):
+
+    @blp.response(200,AssessmentSchema)
     def get(self,assessment_id):
         assessment = AssessmentModel.query.get_or_404(assessment_id)
         return assessment
 
 class AsessmentList(MethodView):
+
+    @blp.arguments(AssessmentSchema)
+    @blp.response(200,AssessmentSchema)
     def post(self,assessment_data):
 
         assessment = AssessmentModel(**assessment_data)

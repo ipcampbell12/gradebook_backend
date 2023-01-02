@@ -13,7 +13,7 @@ blp = Blueprint("SubjectModel",__name__,description="Operations on subjects")
 @blp.route("/subject/<string:subjuect_id>")
 class Subject(MethodView):
 
-    @blp.responses(200, SubjectSchema)
+    @blp.response(200, SubjectSchema)
     def get(self,assessment_id):
         assessment = SubjectModel.query.get_or_404(assessment_id)
         return assessment
@@ -21,7 +21,7 @@ class Subject(MethodView):
 class SubjectList(MethodView):
 
     @blp.arguments(SubjectSchema)
-    @blp.responses(200, SubjectSchema)
+    @blp.response(200, SubjectSchema)
     def post(self,assessment_data):
 
         assessment = SubjectModel(**assessment_data)
