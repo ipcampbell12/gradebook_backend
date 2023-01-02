@@ -32,3 +32,6 @@ class StudentList(MethodView):
             db.session.commit()
         except SQLAlchemyError:
             abort(500, "There was an error adding this student")
+        
+
+        return student

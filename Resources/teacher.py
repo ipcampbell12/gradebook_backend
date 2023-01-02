@@ -26,8 +26,9 @@ class Teacher(MethodView):
 @blp.route('/teacher')
 class TeachersList(MethodView):
     
+    @blp.response(200,TeacherSchema(many=True))
     def get(self):
-        return teachers.values()
+        return TeacherModel.query.all()
     
     @blp.arguments(TeacherSchema)
     @blp.response(200,TeacherSchema)

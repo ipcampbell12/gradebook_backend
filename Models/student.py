@@ -6,7 +6,7 @@ class StudentModel(db.Model):
     id = db.Column(db.Integer, nullable=False, primary_key=True)
     fname = db.Column(db.String(80), nullable=False)
     lname = db.Column(db.String(80), nullable=False)
-    teacher = db.Column(db.Integer, db.ForeignKey('teachers.id'))
+    teacher_id = db.Column(db.Integer, db.ForeignKey('teachers.id'),unique=True,nullable=False)
     # assessments = db.relationship('Assessment', secondary=student_assessment, backref=db.backref(
     #     'students', cascade="all, delete-orphan", single_parent=True))
     
