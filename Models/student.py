@@ -1,6 +1,6 @@
 from db import db 
 
-class Student(db.Model):
+class StudentModel(db.Model):
     __tablename__ = 'students'
 
     id = db.Column(db.Integer, nullable=False, primary_key=True)

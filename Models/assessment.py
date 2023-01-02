@@ -2,7 +2,7 @@ from db import db
 from datetime import datetime
 
 
-class Assessment(db.Model):
+class AssessmentModel(db.Model):
     __tablename__ = 'assessments'
 
     id = db.Column(db.Integer, nullable=False, primary_key=True)

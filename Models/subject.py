@@ -1,6 +1,6 @@
 from db import db 
 
-class Subject(db.Model):
+class SubjectModel(db.Model):
     __tablename__ = 'subjects'
 
     id = db.Column(db.Integer, nullable=False, primary_key=True)

@@ -3,6 +3,9 @@ from flask_smorest import Blueprint,abort
 from flask.views import MethodView
 from schemas import TeacherSchema
 
+from db import db
+from Models import TeacherModel
+
 blp = Blueprint("Teachers",__name__,description="Operations on teachers")
 
 @blp.route('/teacher/<string:teacher_id>')
