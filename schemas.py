@@ -25,6 +25,7 @@ class StudentSchema(PlainStudentSchema):
 
 class TeacherSchema(PlainTeacherSchema):
     students = fields.List(fields.Nested(PlainStudentSchema()),dump_only=True)
+    assessments = fields.List(fields.Nested(PlainAssessmentSchema()),dump_only=True)
 
 class AssessmentSchema(PlainAssessmentSchema):
     subject_id=fields.Int(required=True,load_only=True)

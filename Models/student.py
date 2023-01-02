@@ -9,6 +9,5 @@ class StudentModel(db.Model):
     teacher_id = db.Column(db.Integer, db.ForeignKey('teachers.id'), unique=False, nullable=False)
 
     teacher = db.relationship("TeacherModel",back_populates="students")
-    # assessments = db.relationship('Assessment', secondary=student_assessment, backref=db.backref(
-    #     'students', cascade="all, delete-orphan", single_parent=True))
+    
     
