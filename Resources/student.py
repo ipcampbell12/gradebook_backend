@@ -34,7 +34,7 @@ class StudentList(MethodView):
         try:
             db.session.add(student)
             db.session.commit()
-            print(student)
+            
         except SQLAlchemyError:
             abort(500, "There was an error adding this student")
         
