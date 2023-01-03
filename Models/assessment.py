@@ -12,4 +12,5 @@ class AssessmentModel(db.Model):
     # teacher_id = db.Column(db.Integer, db.ForeignKey('teachers.id'),unique=False, nullable=False)
 
     subject = db.relationship("SubjectModel",back_populates="assessments")
+    students = db.relationship("StudentModel",back_populates="assessments",secondary="students_assessments")
     # teacher = db.relationship("TeacherModel",back_populates="assessments")
