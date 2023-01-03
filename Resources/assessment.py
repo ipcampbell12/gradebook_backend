@@ -24,6 +24,22 @@ class Assessment(MethodView):
         db.session.delete(assessment)
         db.session.commit()
         return {"message":f"The assessment {assessment.name} was deleted."}
+    
+    @blp.arguments(AssessmentSchema)
+    @blp.response(200,AssessmentSchema)
+    def put(self, assessment_data, assessment_id):
+        assessment = AssessmentModel.query.get(assessment_id)
+
+        if assessment:
+            assessment.name = assessment_data["name"]
+            assessment.subject_id = assessment_data["subject_id"]
+        else:
+            assessment = AssessmentModel(id=assessment_id, **assessment_data)
+        
+        db.session.add(assessment)
+        db.session.commit()
+
+        return assessment
 
 @blp.route("/assessment")
 class AsessmentList(MethodView):

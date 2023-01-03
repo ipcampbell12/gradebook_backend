@@ -25,6 +25,22 @@ class Teacher(MethodView):
         db.session.commit()
 
         return {"message":f"The teacher {teacher.fname} was deleted "}
+    
+    @blp.arguments(TeacherSchema)
+    @blp.response(200,TeacherSchema)
+    def put(self, teacher_data, teacher_id):
+        teacher = TeacherModel.query.get(teacher_id)
+
+        if teacher:
+            teacher.fname = teacher_data["fname"]
+            teacher.lname = teacher_data["lname"]
+        else:
+            teacher = TeacherModel(id=teacher_id, **teacher_data)
+        
+        db.session.add(teacher)
+        db.session.commit()
+
+        return teacher
 
 
 @blp.route('/teacher')

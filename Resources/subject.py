@@ -24,6 +24,21 @@ class Subject(MethodView):
         db.session.delete(subject)
         db.session.commit()
         return {"message":f"The subject {subject.name} was deleted."}
+    
+    @blp.arguments(SubjectSchema)
+    @blp.response(200,SubjectSchema)
+    def put(self, subject_data, subject_id):
+        subject = SubjectModel.query.get(subject_id)
+
+        if subject:
+            subject.name = subject_data["name"]
+        else:
+            subject = SubjectModel(id=subject_id, **subject_data)
+        
+        db.session.add(subject)
+        db.session.commit()
+
+        return subject
 
 @blp.route("/subject")
 class SubjectList(MethodView):
