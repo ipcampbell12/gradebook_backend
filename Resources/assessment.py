@@ -61,4 +61,7 @@ class AsessmentList(MethodView):
             abort(500, "We could not add this assessment")
 
         return assessment
+    
+
+#@blp.route("/student/<string:student_id>/assessment/")
 

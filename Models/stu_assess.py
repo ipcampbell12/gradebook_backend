@@ -5,4 +5,5 @@ class StudentsAssessments(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     student_id = db.Columnt(db.Integer,db.ForeignKey("students.id"))
-    assessment_id = db.Columnt(db.Integer,db.ForeignKey("assessments.id"))
+    assessment_id = db.Column(db.Integer,db.ForeignKey("assessments.id"))
+    score = db.Column(db.Integer, nullable=False)
