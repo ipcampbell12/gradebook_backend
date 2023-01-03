@@ -8,6 +8,6 @@ class StudentModel(db.Model):
     lname = db.Column(db.String(80), unique=False, nullable=False)
     teacher_id = db.Column(db.Integer, db.ForeignKey('teachers.id'), unique=False, nullable=False)
 
-    teachers = db.relationship("TeacherModel",back_populates="students")
+    teacher = db.relationship("TeacherModel",back_populates="students")
     
     

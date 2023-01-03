@@ -1,5 +1,5 @@
 from db import db
-from datetime import datetime
+from datetime import date
 
 
 class AssessmentModel(db.Model):
@@ -7,7 +7,7 @@ class AssessmentModel(db.Model):
 
     id = db.Column(db.Integer, nullable=False, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
-    date = db.Column(db.DateTime, default=datetime.utcnow)
+    date = db.Column(db.DateTime, default=date)
     subject_id = db.Column(db.Integer, db.ForeignKey('subjects.id'),unique=False, nullable=False)
     # teacher_id = db.Column(db.Integer, db.ForeignKey('teachers.id'),unique=False, nullable=False)
 

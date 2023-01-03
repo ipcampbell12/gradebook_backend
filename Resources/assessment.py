@@ -10,7 +10,7 @@ from schemas import AssessmentSchema
 
 blp = Blueprint("Assessments",__name__,description="Operations on assessments")
 
-@blp.route("/assessments/<string:assessment_id>")
+@blp.route("/assessment/<string:assessment_id>")
 class Assessment(MethodView):
 
     @blp.response(200,AssessmentSchema)
@@ -18,6 +18,7 @@ class Assessment(MethodView):
         assessment = AssessmentModel.query.get_or_404(assessment_id)
         return assessment
 
+@blp.route("/assessment")
 class AsessmentList(MethodView):
 
     @blp.response(200,AssessmentSchema(many=True))
