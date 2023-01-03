@@ -17,6 +17,12 @@ class Student(MethodView):
         student = StudentModel.query.get_or_404(student_id)
         return student 
 
+    def delete(self, student_id):
+        student = StudentModel.query.get_or_404(student_id)
+
+        db.session.delete(student)
+        db.session.commit()
+        return {"message":f"The student {student.fname} was deleted."}
 
 @blp.route('/student')
 class StudentList(MethodView):
