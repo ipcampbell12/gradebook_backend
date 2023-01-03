@@ -23,6 +23,24 @@ class Student(MethodView):
         db.session.delete(student)
         db.session.commit()
         return {"message":f"The student {student.fname} was deleted."}
+    
+    @blp.arguments(StudentSchema)
+    @blp.response(200,StudentSchema)
+    def put(self, student_data, student_id):
+        student = StudentModel.query.get(student_id)
+
+        if student:
+            student.fname = student_data["fname"]
+            student.lname = student_data["lname"]
+            student.teacher_id = student_data["teacher_id"]
+        else:
+            student = StudentModel(id=student_id, **student_data)
+        
+        db.session.add(student)
+        db.session.commit()
+
+        return student
+
 
 @blp.route('/student')
 class StudentList(MethodView):
