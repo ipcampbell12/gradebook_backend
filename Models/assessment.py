@@ -11,5 +11,5 @@ class AssessmentModel(db.Model):
     subject_id = db.Column(db.Integer, db.ForeignKey('subjects.id'),unique=False, nullable=False)
     # teacher_id = db.Column(db.Integer, db.ForeignKey('teachers.id'),unique=False, nullable=False)
 
-    subjects = db.relationship("SubjectModel",back_populates="assessments")
+    subject = db.relationship("SubjectModel",back_populates="assessments")
     # teacher = db.relationship("TeacherModel",back_populates="assessments")

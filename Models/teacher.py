@@ -9,5 +9,5 @@ class TeacherModel(db.Model):
     students = db.relationship("StudentModel",back_populates="teacher",lazy="dynamic")
     # assessments = db.relationship("AssessmentModel",back_populates="teachers",lazy="dynamic")
     # email = db.Column(db.String(80), nullable=False)
-    # password = db.Column(db.String(80), nullable=False)
+    # password = db.Column(db.String(80), nullable=False)h
 
