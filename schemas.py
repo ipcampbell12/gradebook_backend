@@ -34,4 +34,8 @@ class AssessmentSchema(PlainAssessmentSchema):
 class SubjectSchema(PlainSubjectSchema):
     assessments = fields.List(fields.Nested(PlainAssessmentSchema(),dump_only=True))
 
+class StudentAndAssessmentSchema(Schema):
+    message = fields.Str()
+    student = fields.Nested(StudentSchema)
+    assessment = fields.Nested(AssessmentSchema)
 #primary keys are dump only, and foreign keys are load only
