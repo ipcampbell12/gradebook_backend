@@ -17,6 +17,13 @@ class Assessment(MethodView):
     def get(self,assessment_id):
         assessment = AssessmentModel.query.get_or_404(assessment_id)
         return assessment
+    
+    def delete(self, assessment_id):
+        assessment = AssessmentModel.query.get_or_404(assessment_id)
+
+        db.session.delete(assessment)
+        db.session.commit()
+        return {"message":f"The assessment {assessment.name} was deleted."}
 
 @blp.route("/assessment")
 class AsessmentList(MethodView):

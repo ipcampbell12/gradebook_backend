@@ -17,6 +17,13 @@ class Subject(MethodView):
     def get(self,subject_id):
         subject = SubjectModel.query.get_or_404(subject_id)
         return subject
+    
+    def delete(self, subject_id):
+        subject = SubjectModel.query.get_or_404(subject_id)
+
+        db.session.delete(subject)
+        db.session.commit()
+        return {"message":f"The subject {subject.name} was deleted."}
 
 @blp.route("/subject")
 class SubjectList(MethodView):

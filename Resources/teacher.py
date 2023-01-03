@@ -20,7 +20,11 @@ class Teacher(MethodView):
     
     def delete(self, teacher_id):
         teacher = TeacherModel.query.get_or_404(teacher_id)
-        raise NotImplementedError("Deleting a teacher has not been implemented yet")
+        
+        db.session.delete(teacher)
+        db.session.commit()
+
+        return {"message":f"The teacher {teacher.fname} was deleted "}
 
 
 @blp.route('/teacher')
