@@ -9,8 +9,8 @@ class AssessmentModel(db.Model):
     name = db.Column(db.String(80), nullable=False)
     date = db.Column(db.DateTime, default=date)
     subject_id = db.Column(db.Integer, db.ForeignKey('subjects.id'),unique=False, nullable=False)
-    # teacher_id = db.Column(db.Integer, db.ForeignKey('teachers.id'),unique=False, nullable=False)
+    
 
     subject = db.relationship("SubjectModel",back_populates="assessments")
     students = db.relationship("StudentModel",back_populates="assessments",secondary="students_assessments")
-    # teacher = db.relationship("TeacherModel",back_populates="assessments")
+    teachers = db.relationship("TeacherModel",back_populates="assessments",secondary="teachers_assessments")
