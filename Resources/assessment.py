@@ -102,7 +102,7 @@ class AddAssessmentToStudent(MethodView):
         #this is where it breaks 
         student.assessments.append(student_assessment)
 
-    
+
         db.session.add(student_assessment)
         db.session.commit()
     
@@ -120,6 +120,19 @@ class StudentAssessmentList(MethodView):
         db.session.commit()
 
         return {"message": "This student_assessment was deleted"}
+
+    @blp.arguments(StudentAndAssessmentSchema)
+    @blp.response(200,StudentAndAssessmentSchema)
+    def put(self,data, student_assessment_id):
+        student_assessment = StudentsAssessments.query.get(student_assessment_id)
+
+        if student_assessment:
+            student_assessment.score = data["score"]
+        
+        db.session.add(student_assessment)
+        db.session.commit()
+
+        return student_assessment
 
 @blp.route("/student_assessment")
 class OtherStudentAssessmentList(MethodView):
