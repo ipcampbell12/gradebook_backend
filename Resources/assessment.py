@@ -95,7 +95,6 @@ class AddAssessmentToStudent(MethodView):
     def post(self, data, student_id, assessment_id):
 
         student = StudentModel.query.get(student_id)
-        #assessment= AssessmentModel.query.get(student_id)
         student_assessment = StudentsAssessments(score = data["score"])
         student_assessment.assessment = AssessmentModel.query.get(assessment_id)
 
@@ -109,5 +108,23 @@ class AddAssessmentToStudent(MethodView):
     
         
         return student_assessment
+    
 
+@blp.route("/student_assessment/<string:student_assessment_id>")
+class StudentAssessmentList(MethodView):
+
+    def delete(self, student_assessment_id):
+        student_assessment = StudentsAssessments.query.get(student_assessment_id)
+
+        db.session.delete(student_assessment)
+        db.session.commit()
+
+        return {"message": "This student_assessment was deleted"}
+
+@blp.route("/student_assessment")
+class OtherStudentAssessmentList(MethodView):
+
+    @blp.response(200,StudentAndAssessmentSchema(many=True))
+    def get(self):
+        return StudentsAssessments.query.all()
 
