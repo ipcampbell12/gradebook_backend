@@ -7,3 +7,7 @@ class StudentsAssessments(db.Model):
     student_id = db.Column(db.Integer,db.ForeignKey("students.id"))
     assessment_id = db.Column(db.Integer,db.ForeignKey("assessments.id"))
     score = db.Column(db.Integer, nullable=False, default=None)
+
+    
+    assessment = db.relationship("AssessmentModel",back_populates="students")
+    student = db.relationship("StudentModel",back_populates="assessments")

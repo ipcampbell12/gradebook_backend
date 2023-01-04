@@ -6,7 +6,7 @@ from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 
 from db import db
 from Models import AssessmentModel, TeacherModel, StudentModel, StudentsAssessments
-from schemas import AssessmentSchema, TeacherAndAssessmentSchema, StudentAndAssessmentSchema
+from schemas import AssessmentSchema, TeacherAndAssessmentSchema, StudentAndAssessmentSchema, StudentSchema
 
 blp = Blueprint("Assessments",__name__,description="Operations on assessments")
 
@@ -91,20 +91,23 @@ class AddAssessmentToStudent(MethodView):
     
     @blp.arguments(StudentAndAssessmentSchema)
     @blp.response(201, AssessmentSchema)
-    def post(self, student_assessment_data, student_id, assessment_id):
-       
-        
-        student_assessement = StudentsAssessments(
-            student_id = StudentModel.query.get_or_404(student_id),
-            assessment_id = AssessmentModel.query.get_or_404(assessment_id),
-            score = StudentsAssessments(student_assessment_data.score)
-        )
+    @blp.response(201, StudentSchema)
+    def post(self, data, student_id, assessment_id):
+
+        student = StudentModel.query.get(student_id)
+        #assessment= AssessmentModel.query.get(student_id)
+        student_assessment = StudentsAssessments(score = data["score"])
+        student_assessment.assessment = AssessmentModel.query.get(assessment_id)
+
+        #print(type(assessment))
+        #this is where it breaks 
+        student.assessments.append(student_assessment)
 
     
-        db.session.add(student_assessement)
+        db.session.add(student_assessment)
         db.session.commit()
     
         
-        return student_assessement
+        return student_assessment
 
 

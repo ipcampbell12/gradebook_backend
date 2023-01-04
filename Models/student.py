@@ -10,5 +10,14 @@ class StudentModel(db.Model):
 
     teacher = db.relationship("TeacherModel",back_populates="students")
     
-    assessments = db.relationship("AssessmentModel",back_populates="students",secondary="students_assessments")
+    assessments = db.relationship("StudentsAssessments",back_populates="student")
+
+    # def __init__(self,id,fname,lname,teacher_id,teacher,assessments):
+    #     self.id = id 
+    #     self.fname = fname
+    #     self.lname = lname
+    #     self.teacher_id = teacher_id
+    #     self.teacher = teacher
+    #     self.assessments = assessments
+
     
