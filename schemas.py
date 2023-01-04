@@ -38,9 +38,11 @@ class StudentAndAssessmentSchema(Schema):
     message = fields.Str()
     student = fields.Nested(StudentSchema)
     assessment = fields.Nested(AssessmentSchema)
+    score = fields.Int(required=True)
 
 class TeacherAndAssessmentSchema(Schema):
     message = fields.Str()
     teacher = fields.Nested(TeacherSchema)
     assessment = fields.Nested(AssessmentSchema)
+    
 #primary keys are dump only, and foreign keys are load only

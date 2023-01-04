@@ -12,5 +12,7 @@ class AssessmentModel(db.Model):
     
 
     subject = db.relationship("SubjectModel",back_populates="assessments")
-    students = db.relationship("StudentModel",back_populates="assessments",secondary="students_assessments")
+  
     teachers = db.relationship("TeacherModel",back_populates="assessments",secondary="teachers_assessments")
+
+    students = db.relationship("StudentModel",back_populates="assessments",secondary="students_assessments")

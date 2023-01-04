@@ -5,8 +5,8 @@ from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 
 
 from db import db
-from Models import AssessmentModel, TeacherModel, StudentModel
-from schemas import AssessmentSchema
+from Models import AssessmentModel, TeacherModel, StudentModel, StudentsAssessments
+from schemas import AssessmentSchema, TeacherAndAssessmentSchema, StudentAndAssessmentSchema
 
 blp = Blueprint("Assessments",__name__,description="Operations on assessments")
 
@@ -62,7 +62,7 @@ class AsessmentList(MethodView):
 
         return assessment
     
-
+#this one works
 #add an assessment to a teachers 
 @blp.route("/teacher/<string:teacher_id>/assessment/<string:assessment_id>")
 class AddAssessmentToTeacher(MethodView):
@@ -71,6 +71,7 @@ class AddAssessmentToTeacher(MethodView):
     def post(self, teacher_id, assessment_id):
         teacher = TeacherModel.query.get_or_404(teacher_id)
         assessment = AssessmentModel.query.get_or_404(assessment_id)
+        
 
         teacher.assessments.append(assessment)
 
@@ -83,23 +84,27 @@ class AddAssessmentToTeacher(MethodView):
         
         return assessment
 
+#this one doesn't
 #add an assessment to a students 
 @blp.route("/student/<string:student_id>/assessment/<string:assessment_id>")
 class AddAssessmentToStudent(MethodView):
     
+    @blp.arguments(StudentAndAssessmentSchema)
     @blp.response(201, AssessmentSchema)
-    def post(self, student_id, assessment_id):
-        student = StudentModel.query.get_or_404(student_id)
-        assessment = AssessmentModel.query.get_or_404(assessment_id)
-
-        student.assessments.append(assessment)
-
-
-        try:
-            db.session.add(student)
-            db.session.commit()
-        except:
-            abort(500, message="An error occurred when inserting the tag")
+    def post(self, student_assessment_data, student_id, assessment_id):
+       
         
-        return assessment
+        student_assessement = StudentsAssessments(
+            student_id = StudentModel.query.get_or_404(student_id),
+            assessment_id = AssessmentModel.query.get_or_404(assessment_id),
+            score = StudentsAssessments(student_assessment_data.score)
+        )
+
+    
+        db.session.add(student_assessement)
+        db.session.commit()
+    
+        
+        return student_assessement
+
 
