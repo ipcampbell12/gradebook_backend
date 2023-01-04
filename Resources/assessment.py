@@ -113,6 +113,12 @@ class AddAssessmentToStudent(MethodView):
 @blp.route("/student_assessment/<string:student_assessment_id>")
 class StudentAssessmentList(MethodView):
 
+    @blp.response(200,StudentAndAssessmentSchema)
+    def get(self,student_assessment_id):
+        student_assessment = StudentsAssessments.query.get(student_assessment_id)
+
+        return student_assessment
+
     def delete(self, student_assessment_id):
         student_assessment = StudentsAssessments.query.get(student_assessment_id)
 
