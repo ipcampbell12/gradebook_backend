@@ -5,6 +5,16 @@ class GradeModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     subject_id = db.Column(db.Integer,db.ForeignKey("subjects.id"))
+    student_id = db.Column(db.Integer, db.ForeignKey("students.id"))
     grade = db.Column(db.Integer, nullable=False)
 
+    #one to many relationship with subjects (child)
+    subject = db.relationship("SubjectModel",back_populates="grades")
+
+    #one to many relationship with students (child)
+    student = db.relationship("StudentModel",back_populates="grades")
+
+    #one to many relationship with students_assssments (parent)
     students_assessments = db.relationship("StudentsAssessments",back_populates="grade", lazy="dynamic",cascade="all,delete")
+
+   

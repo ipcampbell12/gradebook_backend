@@ -13,5 +13,6 @@ class StudentsAssessments(db.Model):
     assessment = db.relationship("AssessmentModel",back_populates="students")
     student = db.relationship("StudentModel",back_populates="assessments")
 
-    #one to many with grades
-    student_assessment = db.relationship("GradeModel",back_populates="students_assessments")
+    #one to many with grades (child)
+    grade = db.relationship("GradeModel", back_populates="students_assessments")
+    
