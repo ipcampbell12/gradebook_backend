@@ -48,6 +48,7 @@ class StudentAndAssessmentSchema(Schema):
     assessment = fields.Nested(AssessmentSchema)
     score = fields.Int(required=True)
     grade = fields.Nested(PlainGradeSchema)
+    grade_id = fields.Int(required=True,load_only=True)
 
 # class TeacherAndAssessmentSchema(Schema):
 #     message = fields.Str()

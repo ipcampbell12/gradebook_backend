@@ -7,7 +7,8 @@ class GradeModel(db.Model):
     subject_id = db.Column(db.Integer,db.ForeignKey("subjects.id"))
     student_id = db.Column(db.Integer, db.ForeignKey("students.id"))
 
-    #an aggregate of all the students_assessments
+    #an aggregatation of all the students_assessments
+    #but not a relationship column, so it cant be used for back_pouplates
     grade = db.Column(db.Integer, nullable=False)
 
     #one to many relationship with subjects (child)
