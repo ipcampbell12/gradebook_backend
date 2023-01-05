@@ -10,6 +10,8 @@ class SubjectModel(db.Model):
     assessments = db.relationship("AssessmentModel",back_populates="subject",lazy="dynamic")
 
     #one to many relationship with assessments (parent)
-    grades = db.relationship("AssessmentModel",back_populates="grade",lazy=True)
+    #THIS DOESN'T WORK BECASE BACK_POPULATES REFERS TO A COLUMN ON THAT TABLE, AND ASSESSMENTMODEL DOESN'T HAVE THAT COLUMN
+    #BUT IT ALSO DOESN'T WORK BECASE GRADES ISN'T A DB.RELATIONSHIP COLUMN, IT'S JUST AN INTEGER COLUMN
+    grades = db.relationship("GradeModel",back_populates="grade",lazy=True)
 
     

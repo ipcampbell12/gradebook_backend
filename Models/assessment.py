@@ -13,8 +13,9 @@ class AssessmentModel(db.Model):
     # one to many relationship with subject (child)
     subject = db.relationship("SubjectModel",back_populates="assessments")
   
-    # many to many relationship with teachers 
-    teachers = db.relationship("TeacherModel",back_populates="assessments",secondary="teachers_assessments")
-
     #many to many relationships students
     students = db.relationship("StudentsAssessments",back_populates="assessment")
+
+
+    # many to many relationship with teachers 
+    # teachers = db.relationship("TeacherModel",back_populates="assessments",secondary="teachers_assessments")

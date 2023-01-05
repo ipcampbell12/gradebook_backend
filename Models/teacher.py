@@ -10,8 +10,8 @@ class TeacherModel(db.Model):
     #one to many relationship with students 
     students = db.relationship("StudentModel",back_populates="teacher",lazy="dynamic",cascade="all,delete")
 
-    
-    assessments = db.relationship("AssessmentModel",back_populates="teachers",secondary="teachers_assessments")
+
+    # assessments = db.relationship("AssessmentModel",back_populates="teachers",secondary="teachers_assessments")
     # email = db.Column(db.String(80), nullable=False)
     # password = db.Column(db.String(80), nullable=False)h
 

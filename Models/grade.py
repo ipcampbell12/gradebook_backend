@@ -6,6 +6,8 @@ class GradeModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     subject_id = db.Column(db.Integer,db.ForeignKey("subjects.id"))
     student_id = db.Column(db.Integer, db.ForeignKey("students.id"))
+
+    #an aggregate of all the students_assessments
     grade = db.Column(db.Integer, nullable=False)
 
     #one to many relationship with subjects (child)
