@@ -1,6 +1,6 @@
 from marshmallow import Schema, fields
 
-class PlainTeacherSchema(Schema):
+class TeacherSchema(Schema):
     id = fields.Int(dump_only=True)
     fname = fields.Str(required=True)
     lname = fields.Str(required=True)
@@ -24,31 +24,34 @@ class PlainSubjectSchema(Schema):
 #     grade = fields.Int(required=True)
 
 class StudentSchema(PlainStudentSchema):
-    teacher_id = fields.Int(required=True, load_only=True)
-    teacher = fields.Nested(PlainTeacherSchema(),dump_only=True)
+    #teacher_id = fields.Int(required=True, load_only=True)
+    teacher = fields.Nested(TeacherSchema(),dump_only=True)
     assessments = fields.List(fields.Nested(PlainAssessmentSchema(),dump_only=True))
     # grades = fields.List(fields.Nested(PlainGradeSchema(),dump_only=True))
     
-class TeacherSchema(PlainTeacherSchema):
-    students = fields.List(fields.Nested(PlainStudentSchema()),dump_only=True)
+# class TeacherSchema(PlainTeacherSchema):
+#     students = fields.List(fields.Nested(PlainStudentSchema()),dump_only=True)
     #assessments = fields.List(fields.Nested(PlainAssessmentSchema()),dump_only=True)
 
 class AssessmentSchema(PlainAssessmentSchema):
     subject_id=fields.Int(required=True,load_only=True)
     subject = fields.Nested(PlainSubjectSchema(),dump_only=True)
-    students = fields.Nested(PlainStudentSchema(),dump_only=True)
+    #students = fields.Nested(StudentSchema(),dump_only=True)
 
 class SubjectSchema(PlainSubjectSchema):
     assessments = fields.List(fields.Nested(PlainAssessmentSchema(),dump_only=True))
     # grades = fields.List(fields.Nested(PlainSubjectSchema(),dump_only=True))
 
+
+#the assessment/student id isn't returning anything because the api doesn't know what those are, since they aren't referencing any of the other schemas 
+
 class StudentAndAssessmentSchema(Schema):
-    message = fields.Str()
-    student = fields.Nested(StudentSchema)
-    assessment = fields.Nested(AssessmentSchema)
+    # message = fields.Str()
+    id = fields.Int(dump_only=True)
+    assessment = fields.Nested(AssessmentSchema(only=("id",)),dump_only=True)
     score = fields.Int(required=True)
-    # grade = fields.Nested(PlainGradeSchema)
-    # grade_id = fields.Int(required=True,load_only=True)
+    student = fields.Nested(StudentSchema(only=("id",)),dump_only=True)
+
 
 # class TeacherAndAssessmentSchema(Schema):
 #     message = fields.Str()

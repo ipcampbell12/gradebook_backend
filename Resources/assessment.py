@@ -2,6 +2,8 @@ from flask import request
 from flask_smorest import abort, Blueprint
 from flask.views import MethodView
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
+from sqlalchemy import func
+import json
 
 
 from db import db
@@ -144,27 +146,34 @@ class StudentAssessmentList(MethodView):
 
 @blp.route("/student_assessment")
 class OtherStudentAssessmentList(MethodView):
-
+    
     @blp.response(200,StudentAndAssessmentSchema(many=True))
     def get(self):
-        return StudentsAssessments.query.all()
+        students_assessments = db.session.query(StudentsAssessments).order_by(StudentsAssessments.student_id).all()
+        return students_assessments
 
 
-@blp.route("/grades")
-class Grades(MethodView):
+@blp.route("/grade/<string:student_id>")
+class Scores(MethodView):
 
-    @blp.response(200,AssessmentSchema(many=True))
-    @blp.response(200,SubjectSchema(many=True))
-    @blp.response(200,StudentSchema(many=True))
     @blp.response(200,StudentAndAssessmentSchema(many=True))
-    def get(self):
-        students = StudentModel.query.all()
-        assessments = StudentModel.query.all()
-        students_assessments = StudentsAssessments.query.all()
-        subjects = SubjectModel.query.all()
+    def get(self,student_id):
+        scores = db.session.query(StudentsAssessments.score).filter(StudentsAssessments.student_id == student_id).all()
+        
+        scores_list = [score["score"] for score in scores]
+        
 
-        print(assessments)
+        average =sum(scores_list)/len(scores_list)
 
-        return subjects
+        print(average)
+        print(scores_list)
+        return {"Grade":average}
+        
+            
+        
 
+
+#fetch student with particular id
+#find the assessments he has taken
+#iterate through the assessments and find out the grade
         

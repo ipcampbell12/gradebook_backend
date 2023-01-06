@@ -13,6 +13,7 @@ def get_grades():
     ON sa.assessment_id = a.id 
     JOIN subjects su 
     ON a.subject_id = su.id
+    GROUP BY student
     '''
 
     cursor.execute(query)
