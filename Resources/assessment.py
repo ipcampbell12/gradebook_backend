@@ -5,8 +5,9 @@ from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 
 
 from db import db
-from Models import AssessmentModel, TeacherModel, StudentModel, StudentsAssessments
-from schemas import AssessmentSchema, StudentAndAssessmentSchema, StudentSchema
+from Models import AssessmentModel, TeacherModel, StudentModel, StudentsAssessments, SubjectModel
+from schemas import AssessmentSchema, StudentAndAssessmentSchema, StudentSchema, SubjectSchema
+from .query import get_grades
 #TeacherAndAssessmentSchema,
 
 blp = Blueprint("Assessments",__name__,description="Operations on assessments")
@@ -148,3 +149,22 @@ class OtherStudentAssessmentList(MethodView):
     def get(self):
         return StudentsAssessments.query.all()
 
+
+@blp.route("/grades")
+class Grades(MethodView):
+
+    @blp.response(200,AssessmentSchema(many=True))
+    @blp.response(200,SubjectSchema(many=True))
+    @blp.response(200,StudentSchema(many=True))
+    @blp.response(200,StudentAndAssessmentSchema(many=True))
+    def get(self):
+        students = StudentModel.query.all()
+        assessments = StudentModel.query.all()
+        students_assessments = StudentsAssessments.query.all()
+        subjects = SubjectModel.query.all()
+
+        print(assessments)
+
+        return subjects
+
+        

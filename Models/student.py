@@ -13,8 +13,8 @@ class StudentModel(db.Model):
     
     assessments = db.relationship("StudentsAssessments",back_populates="student")
 
-    # one ot many relationship with grades (parent)
-    grades = db.relationship("GradeModel", back_populates="student", cascade="all,delete")
+    # # one ot many relationship with grades (parent)
+    # grades = db.relationship("GradeModel", back_populates="student", cascade="all,delete")
 
     
 
