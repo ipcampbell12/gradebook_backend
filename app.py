@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_smorest import Api
+from flask_jwt_extended import JWTManager
 from Resources.teacher import blp as TeacherBlueprint
 from Resources.student import blp as StudentBlueprint
 from Resources.assessment import blp as AssessmentBlueprint
@@ -19,6 +20,8 @@ def create_app(Config):
     db.init_app(app)
 
     api = Api(app)
+
+    jwt = JWTManager(app)
 
     @app.before_first_request
     def create_tables():

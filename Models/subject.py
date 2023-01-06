@@ -11,7 +11,7 @@ class SubjectModel(db.Model):
 
     #one to many relationship with assessments (parent)
     #THIS DOESN'T WORK BECASE BACK_POPULATES REFERS TO A COLUMN ON THAT TABLE, AND ASSESSMENTMODEL DOESN'T HAVE THAT COLUMN
-    #BUT IT ALSO DOESN'T WORK BECASE GRADES ISN'T A DB.RELATIONSHIP COLUMN, IT'S JUST AN INTEGER COLUMN
+    #BUT IT ALSO DOESN'T WORK BECASE GRADES ISN'T A DB.RELATIONSHIP COLUMN, IT'S JUST AN INTEGER COLUMNthere 
     grades = db.relationship("GradeModel",back_populates="subject",lazy=True)
 
     
