@@ -9,7 +9,7 @@ import json
 from db import db
 from Models import AssessmentModel, TeacherModel, StudentModel, StudentsAssessments, SubjectModel
 from schemas import AssessmentSchema, StudentAndAssessmentSchema, StudentSchema, SubjectSchema
-from .query import get_grades
+
 #TeacherAndAssessmentSchema,
 
 blp = Blueprint("Assessments",__name__,description="Operations on assessments")
