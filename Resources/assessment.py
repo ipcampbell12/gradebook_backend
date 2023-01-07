@@ -156,7 +156,6 @@ class OtherStudentAssessmentList(MethodView):
 @blp.route("/grade/<string:student_id>")
 class Scores(MethodView):
 
-    @blp.response(200,StudentAndAssessmentSchema(many=True))
     def get(self,student_id):
         scores = db.session.query(StudentsAssessments.score).filter(StudentsAssessments.student_id == student_id).all()
         
@@ -169,11 +168,5 @@ class Scores(MethodView):
         print(scores_list)
         return {"Grade":average}
         
-            
-        
 
-
-#fetch student with particular id
-#find the assessments he has taken
-#iterate through the assessments and find out the grade
         
