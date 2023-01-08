@@ -159,14 +159,27 @@ class Scores(MethodView):
     def get(self,student_id):
         scores = db.session.query(StudentsAssessments.score).filter(StudentsAssessments.student_id == student_id).all()
         
+        student = StudentModel.query.get_or_404(student_id)
+
         scores_list = [score["score"] for score in scores]
         
+        average = round(sum(scores_list)/len(scores_list),1)
 
-        average =sum(scores_list)/len(scores_list)
+        return {"Student":student,"Overall Grade":average}
 
-        print(average)
-        print(scores_list)
-        return {"Grade":average}
+@blp.route("/score/<string:student_id>")
+class ScoresList(MethodView):
+
+    # @blp.response(200,StudentAndAssessmentSchema(many=True))
+    def get(self,student_id):
+        scores = db.session.query(StudentsAssessments.score, StudentsAssessments.assessment_id).filter(StudentsAssessments.student_id == student_id).all()
+        
+        tuple_scores = [dict(row) for row in scores]
+        student = StudentModel.query.get_or_404(student_id)
+
+        # json_scores = json.dumps(scores,default=str)
+
+        return {"Student":f"{student.fname} {student.lname}","Scores":tuple_scores}
         
 
         
