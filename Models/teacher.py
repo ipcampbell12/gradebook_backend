@@ -12,6 +12,6 @@ class TeacherModel(db.Model):
 
 
     # assessments = db.relationship("AssessmentModel",back_populates="teachers",secondary="teachers_assessments")
-    # email = db.Column(db.String(80), nullable=False)
-    # password = db.Column(db.String(80), nullable=False)h
+    username = db.Column(db.String(80), nullable=False)
+    password = db.Column(db.String(80), nullable=False)
 
