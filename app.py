@@ -17,15 +17,13 @@ def create_app(Config):
     
     app.config.from_object(Config)
 
-
-    #JWT LOADERS
-    
-
     db.init_app(app)
 
     api = Api(app)
 
     jwt = JWTManager(app)
+
+    
 
     @app.before_first_request
     def create_tables():

@@ -2,6 +2,9 @@ from flask import request
 from flask_smorest import Blueprint,abort
 from flask.views import MethodView
 from schemas import TeacherSchema
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, get_jwt
+
+from passlib.hash import pbkdf2_sha256
 
 from db import db
 from Models import TeacherModel
@@ -54,7 +57,14 @@ class TeachersList(MethodView):
     @blp.response(200,TeacherSchema)
     def post(self, teacher_data):
         
-        teacher = TeacherModel(**teacher_data)
+        if TeacherModel.query.filter(TeacherModel.username == teacher_data["username"]).first():
+            abort(409, message="A user with that username already exists")
+
+        teacher = TeacherModel(
+            **teacher_data,
+             username=teacher_data["username"],
+             password=pbkdf2_sha256.hash(teacher_data["password"])
+             )
 
         try: 
             db.session.add(teacher)
@@ -64,5 +74,5 @@ class TeachersList(MethodView):
         except SQLAlchemyError:
             abort(500, "There was an error when adding this teacher")
 
-        return teacher, 201
+        return {"message":f"The teacher accoutn for {teacher} was created successfully"}, 201
  
