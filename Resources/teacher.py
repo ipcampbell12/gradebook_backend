@@ -2,7 +2,7 @@ from flask import request
 from flask_smorest import Blueprint,abort
 from flask.views import MethodView
 from schemas import TeacherSchema
-from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, get_jwt
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, get_jwt, create_refresh_token
 
 from passlib.hash import pbkdf2_sha256
 
@@ -15,12 +15,13 @@ blp = Blueprint("Teachers",__name__,description="Operations on teachers")
 @blp.route('/teacher/<string:teacher_id>')
 class Teacher(MethodView):
 
+    @jwt_required
     @blp.response(200,TeacherSchema)
     def get(self,teacher_id):
         teacher = TeacherModel.query.get_or_404(teacher_id)
         return teacher 
 
-    
+    @jwt_required
     def delete(self, teacher_id):
         teacher = TeacherModel.query.get_or_404(teacher_id)
         
@@ -29,6 +30,7 @@ class Teacher(MethodView):
 
         return {"message":f"The teacher {teacher.fname} was deleted "}
     
+    @jwt_required
     @blp.arguments(TeacherSchema)
     @blp.response(200,TeacherSchema)
     def put(self, teacher_data, teacher_id):
@@ -49,6 +51,7 @@ class Teacher(MethodView):
 @blp.route('/teacher')
 class TeachersList(MethodView):
     
+    @jwt_required
     @blp.response(200,TeacherSchema(many=True))
     def get(self):
         return TeacherModel.query.all()
@@ -76,4 +79,20 @@ class TeachersList(MethodView):
             abort(500, "There was an error when adding this teacher")
 
         return {"message":f"The teacher accoutn for {teacher} was created successfully"}, 201
- 
+    
+@blp.route("/login")
+class TeacherLoginClass(MethodView):
+    @blp.arguments(TeacherSchema)
+    def post(self, teacher_data):
+
+        teacher = TeacherModel.query.filter(TeacherModel.username == teacher_data["username"]).first()
+
+        if teacher and pbkdf2_sha256.verity(teacher_data["password"], teacher.password):
+
+            access_token = create_access_token(identity=teacher.id, fresh=True)
+
+            refresh_token = create_refresh_token(identity=teacher.id)
+
+            return{"access_token":access_token,"refresh_token":refresh_token}
+
+        abort(401, message="Invalid credentials")
