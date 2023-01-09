@@ -13,7 +13,7 @@ blp = Blueprint("Students",__name__,description="Operations on students")
 @blp.route("/student/<string:student_id>")
 class Student(MethodView):
 
-    # @jwt_required
+    @jwt_required()
     @blp.response(200,StudentSchema)
     def get(self, student_id):
         student = StudentModel.query.get_or_404(student_id)

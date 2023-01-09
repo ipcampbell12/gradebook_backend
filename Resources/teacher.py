@@ -99,14 +99,12 @@ class TeacherLoginClass(MethodView):
         abort(401, message="Invalid credentials")
 
 @blp.route("/logout")
-class TeacherLoginClass(MethodView):
+class TeacherLogout(MethodView):
     
+    @jwt_required()
     def post(self):
-
-        @jwt_required()
-        def post(self):
-            jti=get_jwt()["jti"]
-            BLOCKLIST.add(jti)
+        jti=get_jwt()["jti"]
+        BLOCKLIST.add(jti)
        
 
         return {"message":"User successfully logged out."}
