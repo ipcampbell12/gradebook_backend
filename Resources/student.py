@@ -13,13 +13,13 @@ blp = Blueprint("Students",__name__,description="Operations on students")
 @blp.route("/student/<string:student_id>")
 class Student(MethodView):
 
-    @jwt_required
+    # @jwt_required
     @blp.response(200,StudentSchema)
     def get(self, student_id):
         student = StudentModel.query.get_or_404(student_id)
         return student 
 
-    @jwt_required
+    @jwt_required()
     def delete(self, student_id):
         student = StudentModel.query.get_or_404(student_id)
 
@@ -27,7 +27,7 @@ class Student(MethodView):
         db.session.commit()
         return {"message":f"The student {student.fname} was deleted."}
     
-    @jwt_required
+    @jwt_required()
     @blp.arguments(StudentSchema)
     @blp.response(200,StudentSchema)
     def put(self, student_data, student_id):
@@ -49,12 +49,12 @@ class Student(MethodView):
 @blp.route('/student')
 class StudentList(MethodView):
     
-    @jwt_required
+    @jwt_required()
     @blp.response(200,StudentSchema(many=True))
     def get(self):
         return StudentModel.query.all()
 
-    @jwt_required
+    @jwt_required()
     @blp.arguments(StudentSchema)
     @blp.response(200,StudentSchema)
     def post(self,student_data):

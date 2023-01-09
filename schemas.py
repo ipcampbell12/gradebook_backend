@@ -1,7 +1,7 @@
 from marshmallow import Schema, fields
 
 class TeacherSchema(Schema):
-    message = fields.Str()
+    # message = fields.Str()
     id = fields.Int(dump_only=True)
     fname = fields.Str(required=True)
     lname = fields.Str(required=True)
@@ -31,7 +31,7 @@ class PlainSubjectSchema(Schema):
 #     grade = fields.Int(required=True)
 
 class StudentSchema(PlainStudentSchema):
-    #teacher_id = fields.Int(required=True, load_only=True)
+    teacher_id = fields.Int(required=True, load_only=True)
     teacher = fields.Nested(TeacherSchema(),dump_only=True)
     assessments = fields.List(fields.Nested(PlainAssessmentSchema(),dump_only=True))
     # grades = fields.List(fields.Nested(PlainGradeSchema(),dump_only=True))
