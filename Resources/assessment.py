@@ -177,7 +177,7 @@ class Scores(MethodView):
         
         average = round(sum(scores_list)/len(scores_list),1)
 
-        return {"Student":f"{student.fname}{student.lname}","Overall Grade":average}
+        return {"student":f"{student.fname}{student.lname}","overall_grade":average}
 
 @blp.route("/score/<string:student_id>")
 class ScoresList(MethodView):
