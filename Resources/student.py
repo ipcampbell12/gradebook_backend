@@ -70,3 +70,5 @@ class StudentList(MethodView):
         
 
         return student
+
+

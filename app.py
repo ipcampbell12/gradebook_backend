@@ -35,7 +35,24 @@ def create_app(Config):
                 {"description":"The token has been revoked.","error":"token_revoked"}
             )
         )
+
+    @jwt.needs_fresh_token_loader
+    def token_not_fresh_callback(jwt_header, jwt_payload):
+        return (
+            jsonify(
+                {
+                    "description":"The token is not fresh",
+                    "error":"fresh_token_required"
+                }
+            )
+        )
     
+    @jwt.expired_token_loader
+    def expired_token_laoder(jwt_header, jwt_payload):
+
+        return (
+            jsonify({"message":"The token has expired.","error":"token_expired"},401,)
+        )
 
     @jwt.invalid_token_loader
     def invalied_token_callback(error):
