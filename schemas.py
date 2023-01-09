@@ -8,6 +8,10 @@ class TeacherSchema(Schema):
     username = fields.Str(required=True)
     password = fields.Str(required=True, load_only=True)
 
+class LoginSchema(Schema):
+    username = fields.Str(required=True)
+    password = fields.Str(required=True, load_only=True)
+
 class PlainStudentSchema(Schema):
     id = fields.Int(dump_only=True)
     fname = fields.Str(required=True)

@@ -1,7 +1,7 @@
 from flask import request
 from flask_smorest import Blueprint,abort
 from flask.views import MethodView
-from schemas import TeacherSchema
+from schemas import TeacherSchema, LoginSchema
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, get_jwt, create_refresh_token
 
 from passlib.hash import pbkdf2_sha256
@@ -82,12 +82,12 @@ class TeachersList(MethodView):
     
 @blp.route("/login")
 class TeacherLoginClass(MethodView):
-    @blp.arguments(TeacherSchema)
+    @blp.arguments(LoginSchema)
     def post(self, teacher_data):
 
         teacher = TeacherModel.query.filter(TeacherModel.username == teacher_data["username"]).first()
 
-        if teacher and pbkdf2_sha256.verity(teacher_data["password"], teacher.password):
+        if teacher and pbkdf2_sha256.verify(teacher_data["password"], teacher.password):
 
             access_token = create_access_token(identity=teacher.id, fresh=True)
 
