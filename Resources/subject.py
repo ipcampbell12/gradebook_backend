@@ -2,6 +2,7 @@ from flask import request
 from flask_smorest import abort, Blueprint
 from flask.views import MethodView
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
+from flask_jwt_extended import jwt_required
 
 
 from db import db
@@ -13,11 +14,13 @@ blp = Blueprint("SubjectModel",__name__,description="Operations on subjects")
 @blp.route("/subject/<string:subject_id>")
 class Subject(MethodView):
 
+    @jwt_required
     @blp.response(200, SubjectSchema)
     def get(self,subject_id):
         subject = SubjectModel.query.get_or_404(subject_id)
         return subject
     
+    @jwt_required
     def delete(self, subject_id):
         subject = SubjectModel.query.get_or_404(subject_id)
 
@@ -25,6 +28,7 @@ class Subject(MethodView):
         db.session.commit()
         return {"message":f"The subject {subject.name} was deleted."}
     
+    @jwt_required
     @blp.arguments(SubjectSchema)
     @blp.response(200,SubjectSchema)
     def put(self, subject_data, subject_id):
@@ -43,10 +47,12 @@ class Subject(MethodView):
 @blp.route("/subject")
 class SubjectList(MethodView):
 
+    @jwt_required
     @blp.response(200,SubjectSchema(many=True))
     def get(self):
         return SubjectModel.query.all()
-        
+    
+    @jwt_required
     @blp.arguments(SubjectSchema)
     @blp.response(200, SubjectSchema)
     def post(self,subject_data):

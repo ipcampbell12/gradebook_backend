@@ -2,6 +2,7 @@ from flask import request
 from flask_smorest import abort, Blueprint
 from flask.views import MethodView
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
+from flask_jwt_extended import jwt_required
 from sqlalchemy import func
 import json
 
@@ -17,11 +18,13 @@ blp = Blueprint("Assessments",__name__,description="Operations on assessments")
 @blp.route("/assessment/<string:assessment_id>")
 class Assessment(MethodView):
 
+    @jwt_required
     @blp.response(200,AssessmentSchema)
     def get(self,assessment_id):
         assessment = AssessmentModel.query.get_or_404(assessment_id)
         return assessment
     
+    @jwt_required
     def delete(self, assessment_id):
         assessment = AssessmentModel.query.get_or_404(assessment_id)
 
@@ -29,6 +32,7 @@ class Assessment(MethodView):
         db.session.commit()
         return {"message":f"The assessment {assessment.name} was deleted."}
     
+    @jwt_required
     @blp.arguments(AssessmentSchema)
     @blp.response(200,AssessmentSchema)
     def put(self, assessment_data, assessment_id):
@@ -48,10 +52,12 @@ class Assessment(MethodView):
 @blp.route("/assessment")
 class AsessmentList(MethodView):
 
+    @jwt_required
     @blp.response(200,AssessmentSchema(many=True))
     def get(self):
         return AssessmentModel.query.all()
 
+    @jwt_required
     @blp.arguments(AssessmentSchema)
     @blp.response(200,AssessmentSchema)
     def post(self,assessment_data):
@@ -93,6 +99,7 @@ class AsessmentList(MethodView):
 @blp.route("/student/<string:student_id>/assessment/<string:assessment_id>")
 class AddAssessmentToStudent(MethodView):
     
+    @jwt_required
     @blp.arguments(StudentAndAssessmentSchema)
     @blp.response(201, AssessmentSchema)
     @blp.response(201, StudentSchema)
@@ -117,12 +124,14 @@ class AddAssessmentToStudent(MethodView):
 @blp.route("/student_assessment/<string:student_assessment_id>")
 class StudentAssessmentList(MethodView):
 
+    @jwt_required
     @blp.response(200,StudentAndAssessmentSchema)
     def get(self,student_assessment_id):
         student_assessment = StudentsAssessments.query.get(student_assessment_id)
 
         return student_assessment
 
+    @jwt_required
     def delete(self, student_assessment_id):
         student_assessment = StudentsAssessments.query.get(student_assessment_id)
 
@@ -131,6 +140,7 @@ class StudentAssessmentList(MethodView):
 
         return {"message": "This student_assessment was deleted"}
 
+    @jwt_required
     @blp.arguments(StudentAndAssessmentSchema)
     @blp.response(200,StudentAndAssessmentSchema)
     def put(self,data, student_assessment_id):
@@ -147,6 +157,7 @@ class StudentAssessmentList(MethodView):
 @blp.route("/student_assessment")
 class OtherStudentAssessmentList(MethodView):
     
+    @jwt_required
     @blp.response(200,StudentAndAssessmentSchema(many=True))
     def get(self):
         students_assessments = db.session.query(StudentsAssessments).order_by(StudentsAssessments.student_id).all()
@@ -156,6 +167,7 @@ class OtherStudentAssessmentList(MethodView):
 @blp.route("/grade/<string:student_id>")
 class Scores(MethodView):
 
+    @jwt_required
     def get(self,student_id):
         scores = db.session.query(StudentsAssessments.score).filter(StudentsAssessments.student_id == student_id).all()
         
@@ -171,6 +183,7 @@ class Scores(MethodView):
 class ScoresList(MethodView):
 
     # @blp.response(200,StudentAndAssessmentSchema(many=True))
+    @jwt_required
     def get(self,student_id):
         scores = db.session.query(StudentsAssessments.score, StudentsAssessments.assessment_id).filter(StudentsAssessments.student_id == student_id).all()
         
