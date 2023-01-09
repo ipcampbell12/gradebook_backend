@@ -61,7 +61,8 @@ class TeachersList(MethodView):
             abort(409, message="A user with that username already exists")
 
         teacher = TeacherModel(
-            **teacher_data,
+            fname= teacher_data["fname"],
+            lname=teacher_data["lname"],
              username=teacher_data["username"],
              password=pbkdf2_sha256.hash(teacher_data["password"])
              )
