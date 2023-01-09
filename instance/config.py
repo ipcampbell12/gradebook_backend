@@ -18,6 +18,7 @@ class Config:
     OPENAPI_URL_PREFIX = '/'
     OPENAPI_SWAGGER_UI_PATH= "/swagger-ui"
     OPENAPI_SWAGGER_UI_URL = "https://cdn.jsdelivr.net/npm/swagger-ui-dist/"
+    JWT_SECRET_KEY = "209464218638121439204640626213139170704"
 
 class ProdConfig(Config):
     FLASK_ENV = 'production'
