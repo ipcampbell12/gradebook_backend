@@ -8,6 +8,7 @@ from passlib.hash import pbkdf2_sha256
 
 from db import db
 from Models import TeacherModel
+from instance.blocklist import BLOCKLIST
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 
 blp = Blueprint("Teachers",__name__,description="Operations on teachers")
@@ -96,3 +97,16 @@ class TeacherLoginClass(MethodView):
             return{"access_token":access_token,"refresh_token":refresh_token}
 
         abort(401, message="Invalid credentials")
+
+@blp.route("/logout")
+class TeacherLoginClass(MethodView):
+    @blp.arguments(LoginSchema)
+    def post(self):
+
+        @jwt_required()
+        def post(self):
+            jti=get_jwt()["jti"]
+            BLOCKLIST.add(jti)
+       
+
+        return {"message":"User successfully logged out."}
