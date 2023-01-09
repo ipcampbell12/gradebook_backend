@@ -100,7 +100,7 @@ class TeacherLoginClass(MethodView):
 
 @blp.route("/logout")
 class TeacherLoginClass(MethodView):
-    @blp.arguments(LoginSchema)
+    
     def post(self):
 
         @jwt_required()
