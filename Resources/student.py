@@ -49,12 +49,12 @@ class Student(MethodView):
 @blp.route('/student')
 class StudentList(MethodView):
     
-    @jwt_required()
+    # @jwt_required()
     @blp.response(200,StudentSchema(many=True))
     def get(self):
         return StudentModel.query.all()
 
-    @jwt_required()
+    # @jwt_required()
     @blp.arguments(StudentSchema)
     @blp.response(200,StudentSchema)
     def post(self,student_data):

@@ -1,6 +1,8 @@
 from flask import Flask, jsonify
 from flask_smorest import Api
 from flask_jwt_extended import JWTManager
+from flask_cors import CORS
+
 from Resources.teacher import blp as TeacherBlueprint
 from Resources.student import blp as StudentBlueprint
 from Resources.assessment import blp as AssessmentBlueprint
@@ -14,6 +16,9 @@ from db import db
 # takes a configurationa and file and creates a new app
 def create_app(Config):
     app = Flask(__name__)
+
+    #need this in order to make data able to be fetched to front end
+    CORS(app)
 
     
     app.config.from_object(Config)
