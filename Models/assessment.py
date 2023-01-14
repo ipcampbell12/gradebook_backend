@@ -1,5 +1,5 @@
 from db import db
-from datetime import date
+from datetime import datetime
 
 
 class AssessmentModel(db.Model):
@@ -7,7 +7,7 @@ class AssessmentModel(db.Model):
 
     id = db.Column(db.Integer, nullable=False, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
-    date = db.Column(db.DateTime, default=date)
+    # date = db.Column(db.DateTime, default=datetime.date)
     subject_id = db.Column(db.Integer, db.ForeignKey('subjects.id'),unique=False, nullable=False)
     
     # one to many relationship with subject (child)

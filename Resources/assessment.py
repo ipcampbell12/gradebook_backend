@@ -9,7 +9,7 @@ import json
 
 from db import db
 from Models import AssessmentModel, TeacherModel, StudentModel, StudentsAssessments, SubjectModel
-from schemas import AssessmentSchema, StudentAndAssessmentSchema, StudentSchema, SubjectSchema
+from schemas import AssessmentSchema, StudentAndAssessmentSchema, StudentSchema, SubjectSchema, TeacherSchema
 
 #TeacherAndAssessmentSchema,
 
@@ -110,7 +110,6 @@ class AddAssessmentToStudent(MethodView):
         student_assessment.assessment = AssessmentModel.query.get(assessment_id)
 
         #print(type(assessment))
-        #this is where it breaks 
         student.assessments.append(student_assessment)
 
 
@@ -193,6 +192,62 @@ class ScoresList(MethodView):
         # json_scores = json.dumps(scores,default=str)
 
         return {"Student":f"{student.fname}{student.lname}","Scores":tuple_scores}
-        
 
+
+
+    @blp.route("/teacherstudents/<string:teacher_id>")
+    class TeacherStudent(MethodView):
+
+        @blp.response(200, TeacherSchema)
+        @blp.response(200, StudentSchema(many=True))
+        def get(self, teacher_id):
+
+            students = db.session.query(StudentModel).filter(StudentModel.teacher_id == teacher_id).all()
+
+            return students
+
+    #Add assessment for all students at once 
+    @blp.route("/teacherstudents/<string:teacher_id>/assessment/<string:assessment_id>")
+    class CreateClassAssessment(MethodView):
+
+        @blp.arguments(StudentAndAssessmentSchema)
+        @blp.response(200, TeacherSchema)
+        @blp.response(200, AssessmentSchema)
+        @blp.response(200, StudentSchema(many=True))
+        def post(self, data, teacher_id, assessment_id):
+
+            students = db.session.query(StudentModel).filter(StudentModel.teacher_id == teacher_id).all()
+            
+            for student in students: 
+                student_assessment = StudentsAssessments(score = data["score"])
+                student_assessment.assessment = AssessmentModel.query.get(assessment_id)
+                student.assessments.append(student_assessment)
+                db.session.add(student_assessment)
+            
+            db.session.commit()
+
+            return students
+            
+# @blp.route("/student/<string:student_id>/assessment/<string:assessment_id>")
+# class AddAssessmentToStudent(MethodView):
+    
+#     # @jwt_required()
+#     @blp.arguments(StudentAndAssessmentSchema)
+#     @blp.response(201, AssessmentSchema)
+#     @blp.response(201, StudentSchema)
+#     def post(self, data, student_id, assessment_id):
+
+#         student = StudentModel.query.get(student_id)
+#         student_assessment = StudentsAssessments(score = data["score"])
+#         student_assessment.assessment = AssessmentModel.query.get(assessment_id)
+
+#         #print(type(assessment))
+#         student.assessments.append(student_assessment)
+
+
+#         db.session.add(student_assessment)
+#         db.session.commit()
+    
+        
+#         return student_assessment
         

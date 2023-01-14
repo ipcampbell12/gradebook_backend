@@ -20,7 +20,7 @@ class PlainStudentSchema(Schema):
 class PlainAssessmentSchema(Schema):
     id = fields.Int(dump_only=True)
     name = fields.Str(required=True)
-    date = fields.DateTime(required=True)
+    # date = fields.DateTime(required=True)
 
 class PlainSubjectSchema(Schema):
     id = fields.Int(dump_only=True)
@@ -58,6 +58,7 @@ class StudentAndAssessmentSchema(Schema):
     assessment = fields.Nested(AssessmentSchema(only=("name",)),dump_only=True)
     score = fields.Int(required=True)
     student = fields.Nested(StudentSchema(only=("fname",)),dump_only=True)
+
 
 
 # class TeacherAndAssessmentSchema(Schema):

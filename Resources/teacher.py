@@ -22,7 +22,7 @@ class Teacher(MethodView):
         teacher = TeacherModel.query.get_or_404(teacher_id)
         return teacher 
 
-    @jwt_required()
+    # @jwt_required()
     def delete(self, teacher_id):
         teacher = TeacherModel.query.get_or_404(teacher_id)
         
@@ -31,7 +31,7 @@ class Teacher(MethodView):
 
         return {"message":f"The teacher {teacher.fname} was deleted "}
     
-    @jwt_required()
+    # @jwt_required()
     @blp.arguments(TeacherSchema)
     @blp.response(200,TeacherSchema)
     def put(self, teacher_data, teacher_id):
@@ -52,7 +52,7 @@ class Teacher(MethodView):
 @blp.route('/teacher')
 class TeachersList(MethodView):
     
-    @jwt_required()
+    # @jwt_required()
     @blp.response(200,TeacherSchema(many=True))
     def get(self):
         return TeacherModel.query.all()
@@ -101,7 +101,7 @@ class TeacherLoginClass(MethodView):
 @blp.route("/logout")
 class TeacherLogout(MethodView):
     
-    @jwt_required()
+    # @jwt_required()
     def post(self):
         jti=get_jwt()["jti"]
         BLOCKLIST.add(jti)
