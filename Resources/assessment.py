@@ -228,26 +228,8 @@ class ScoresList(MethodView):
 
             return students
             
-# @blp.route("/student/<string:student_id>/assessment/<string:assessment_id>")
-# class AddAssessmentToStudent(MethodView):
-    
-#     # @jwt_required()
-#     @blp.arguments(StudentAndAssessmentSchema)
-#     @blp.response(201, AssessmentSchema)
-#     @blp.response(201, StudentSchema)
-#     def post(self, data, student_id, assessment_id):
 
-#         student = StudentModel.query.get(student_id)
-#         student_assessment = StudentsAssessments(score = data["score"])
-#         student_assessment.assessment = AssessmentModel.query.get(assessment_id)
-
-#         #print(type(assessment))
-#         student.assessments.append(student_assessment)
-
-
-#         db.session.add(student_assessment)
-#         db.session.commit()
     
         
-#         return student_assessment
+
         
