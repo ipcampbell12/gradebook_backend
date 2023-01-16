@@ -43,6 +43,7 @@ class StudentSchema(PlainStudentSchema):
 class AssessmentSchema(PlainAssessmentSchema):
     subject_id=fields.Int(required=True,load_only=True)
     subject = fields.Nested(PlainSubjectSchema(),dump_only=True)
+    scored = fields.Bool(required=True)
     #students = fields.Nested(StudentSchema(),dump_only=True)
 
 class SubjectSchema(PlainSubjectSchema):
