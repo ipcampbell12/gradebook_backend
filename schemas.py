@@ -20,6 +20,7 @@ class PlainStudentSchema(Schema):
 class PlainAssessmentSchema(Schema):
     id = fields.Int(dump_only=True)
     name = fields.Str(required=True)
+    scored = fields.Bool(required=True)
     # date = fields.DateTime(required=True)
 
 class PlainSubjectSchema(Schema):
@@ -59,15 +60,3 @@ class StudentAndAssessmentSchema(Schema):
     score = fields.Int(required=True)
     student = fields.Nested(StudentSchema(only=("fname",)),dump_only=True)
 
-
-
-# class TeacherAndAssessmentSchema(Schema):
-#     message = fields.Str()∂
-#     teacher = fields.Nested(TeacherSchema)
-#     assessment = fields.Nested(AssessmentSchema)
-
-# class GradeSchema(PlainGradeSchema):
-#     student_id = fields.Int(required=True, load_only=True)
-#     student = fields.Nested(PlainStudentSchema(),dump_only=True)
-#     students_assessments = fields.List(fields.Nested(StudentAndAssessmentSchema(),dump_only=True))
-#primary keys are dump only, and foreign keys are load only
