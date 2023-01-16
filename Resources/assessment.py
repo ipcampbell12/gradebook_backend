@@ -210,7 +210,7 @@ class ScoresList(MethodView):
     @blp.route("/teacherstudents/<string:teacher_id>/assessment/<string:assessment_id>")
     class CreateClassAssessment(MethodView):
 
-        @blp.arguments(StudentAndAssessmentSchema)
+        @blp.arguments(StudentAndAssessmentSchema (many=True))
         @blp.response(200, TeacherSchema)
         @blp.response(200, AssessmentSchema)
         @blp.response(200, StudentSchema(many=True))
@@ -218,8 +218,8 @@ class ScoresList(MethodView):
 
             students = db.session.query(StudentModel).filter(StudentModel.teacher_id == teacher_id).all()
             
-            for student in students: 
-                student_assessment = StudentsAssessments(score = data["score"])
+            for index, student in enumerate(students): 
+                student_assessment = StudentsAssessments(score = data[index]["score"])
                 student_assessment.assessment = AssessmentModel.query.get(assessment_id)
                 student.assessments.append(student_assessment)
                 db.session.add(student_assessment)
