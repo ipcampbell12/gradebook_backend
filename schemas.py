@@ -56,9 +56,9 @@ class SubjectSchema(PlainSubjectSchema):
 class StudentAndAssessmentSchema(Schema):
     # message = fields.Str()
     id = fields.Int(dump_only=True)
-    assessment = fields.Nested(AssessmentSchema(only=("name",)),dump_only=True)
+    assessment = fields.Nested(AssessmentSchema(only=("name","id",)),dump_only=True)
     score = fields.Int(required=True)
-    student = fields.Nested(StudentSchema(only=("fname",)),dump_only=True)
+    student = fields.Nested(StudentSchema(only=("fname","lname","id",)),dump_only=True)
 
 
 

@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, jsonify
 from flask_smorest import abort, Blueprint
 from flask.views import MethodView
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
@@ -41,6 +41,7 @@ class Assessment(MethodView):
         if assessment:
             assessment.name = assessment_data["name"]
             assessment.subject_id = assessment_data["subject_id"]
+            assessment.scored = assessment_data["scored"]
         else:
             assessment = AssessmentModel(id=assessment_id, **assessment_data)
         
@@ -164,7 +165,7 @@ class OtherStudentAssessmentList(MethodView):
 
 
 @blp.route("/grade/<string:student_id>")
-class Scores(MethodView):
+class Grade(MethodView):
 
     # @jwt_required()
     def get(self,student_id):
@@ -177,6 +178,18 @@ class Scores(MethodView):
         average = round(sum(scores_list)/len(scores_list),1)
 
         return {"student":f"{student.fname}{student.lname}","overall_grade":average}
+
+
+@blp.route("/teacherstudents/<string:teacher_id>/grade")
+class Grade(MethodView):
+
+    def get(self, teacher_id):
+        
+        scores = db.session.query(StudentsAssessments.score).group_by(StudentsAssessments.student_id).order_by(StudentsAssessments.student_id).all()
+
+        scores_list = [{"id":score[1],"avg":score[0]} for score in scores]
+
+        return scores_list
 
 @blp.route("/score/<string:student_id>")
 class ScoresList(MethodView):
