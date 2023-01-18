@@ -185,8 +185,8 @@ class Grade(MethodView):
 
     def get(self, teacher_id):
         
-        scores = db.session.query(StudentsAssessments.score).group_by(StudentsAssessments.student_id).order_by(StudentsAssessments.student_id).all()
-
+        scores = db.session.query(db.func.avg(StudentsAssessments.score), StudentsAssessments.student_id).group_by(StudentsAssessments.student_id).order_by(StudentsAssessments.student_id).all()
+        
         scores_list = [{"id":score[1],"avg":score[0]} for score in scores]
 
         return scores_list
