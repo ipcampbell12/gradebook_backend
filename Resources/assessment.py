@@ -185,11 +185,24 @@ class Grade(MethodView):
 
     def get(self, teacher_id):
         
-        scores = db.session.query(db.func.avg(StudentsAssessments.score), StudentsAssessments.student_id).group_by(StudentsAssessments.student_id).order_by(StudentsAssessments.student_id).all()
+        scores = db.session.query(db.func.avg(StudentsAssessments.score), StudentsAssessments.student_id,StudentModel.fname, StudentModel.lname).join(StudentModel,StudentsAssessments.student_id == StudentModel.id).group_by(StudentsAssessments.student_id,StudentModel.fname, StudentModel.lname ).order_by(StudentsAssessments.student_id).all()
         
-        scores_list = [{"id":score[1],"avg":score[0]} for score in scores]
+        scores_list = [{"id":score[1],"avg":score[0], "fname":score[2], "lname":score[3]} for score in scores]
 
         return scores_list
+
+@blp.route("/teacherstudents/<string:teacher_id>/averagegrade")
+class AverageGrade(MethodView):
+
+    def get(self, teacher_id):
+        
+        scores = db.session.query(db.func.avg(StudentsAssessments.score)).all()
+        
+        average = [{"average":num[0]} for num in scores ]
+
+        return average
+
+
 
 @blp.route("/score/<string:student_id>")
 class ScoresList(MethodView):
