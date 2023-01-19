@@ -163,6 +163,22 @@ class OtherStudentAssessmentList(MethodView):
         students_assessments = db.session.query(StudentsAssessments).order_by(StudentsAssessments.student_id).all()
         return students_assessments
 
+#MAKE SURE YOU CHANGE YOUR ROUTE NAMES!!!!
+#get scores by assessment
+@blp.route("/scoresbytest/<string:assessment_id>")
+class AverageModuleScore(MethodView):
+    
+    # @jwt_required()
+    # @blp.response(200, AssessmentSchema)
+    # @blp.response(200,StudentAndAssessmentSchema(many=True))
+    def get(self, assessment_id):
+
+        students_assessments = db.session.query(db.func.avg(StudentsAssessments.score)).filter(StudentsAssessments.assessment_id == assessment_id).all()
+
+        average = [{"average":num[0]} for num in students_assessments ]
+
+        return average
+
 
 @blp.route("/grade/<string:student_id>")
 class Grade(MethodView):
@@ -181,7 +197,7 @@ class Grade(MethodView):
 
 
 @blp.route("/teacherstudents/<string:teacher_id>/grade")
-class Grade(MethodView):
+class Grades(MethodView):
 
     def get(self, teacher_id):
         
@@ -250,6 +266,9 @@ class ScoresList(MethodView):
                 student.assessments.append(student_assessment)
                 db.session.add(student_assessment)
             
+            current_assessment = AssessmentModel.query.get(assessment_id)
+            current_assessment.scored = True
+
             db.session.commit()
 
             return students
