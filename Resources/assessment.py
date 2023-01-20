@@ -7,6 +7,7 @@ from sqlalchemy import func
 import json
 
 
+
 from db import db
 from Models import AssessmentModel, TeacherModel, StudentModel, StudentsAssessments, SubjectModel
 from schemas import AssessmentSchema, StudentAndAssessmentSchema, StudentSchema, SubjectSchema, TeacherSchema
@@ -23,15 +24,7 @@ class Assessment(MethodView):
     def get(self,assessment_id):
         assessment = AssessmentModel.query.get_or_404(assessment_id)
         return assessment
-    
-    # @jwt_required()
-    def delete(self, assessment_id):
-        assessment = AssessmentModel.query.get_or_404(assessment_id)
-
-        db.session.delete(assessment)
-        db.session.commit()
-        return {"message":f"The assessment {assessment.name} was deleted."}
-    
+      
     # @jwt_required()
     @blp.arguments(AssessmentSchema)
     @blp.response(200,AssessmentSchema)
@@ -49,6 +42,21 @@ class Assessment(MethodView):
         db.session.commit()
 
         return assessment
+
+@blp.route("/assessment/<string:assessment_id>/teacher/<string:teacher_id>")
+class DeleteAsessment(MethodView):
+  # @jwt_required()
+    def delete(self, assessment_id,teacher_id):
+        assessment = AssessmentModel.query.get_or_404(assessment_id)
+
+        sas = db.session.query(StudentsAssessments).filter(StudentsAssessments.assessment_id == assessment_id).filter(TeacherModel.id == teacher_id).all()
+
+        for sa in sas:
+            db.session.delete(sa)
+
+        db.session.delete(assessment)
+        db.session.commit()
+        return {"message":f"The assessment {assessment.name} was deleted."}
 
 @blp.route("/assessment")
 class AsessmentList(MethodView):
@@ -96,7 +104,7 @@ class AsessmentList(MethodView):
 #         return assessment
 
 
-#add an assessment to a students 
+#add an assessment to a student
 @blp.route("/student/<string:student_id>/assessment/<string:assessment_id>")
 class AddAssessmentToStudent(MethodView):
     
@@ -203,7 +211,7 @@ class Grades(MethodView):
         
         scores = db.session.query(db.func.avg(StudentsAssessments.score), StudentsAssessments.student_id,StudentModel.fname, StudentModel.lname).join(StudentModel,StudentsAssessments.student_id == StudentModel.id).group_by(StudentsAssessments.student_id,StudentModel.fname, StudentModel.lname ).order_by(StudentsAssessments.student_id).all()
         
-        scores_list = [{"id":score[1],"avg":score[0], "fname":score[2], "lname":score[3]} for score in scores]
+        scores_list = [{"id":score[1],"avg":round(score[0],2), "fname":score[2], "lname":score[3]} for score in scores]
 
         return scores_list
 
