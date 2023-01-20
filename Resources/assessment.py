@@ -209,7 +209,7 @@ class Grades(MethodView):
 
     def get(self, teacher_id):
         
-        scores = db.session.query(db.func.avg(StudentsAssessments.score), StudentsAssessments.student_id,StudentModel.fname, StudentModel.lname).join(StudentModel,StudentsAssessments.student_id == StudentModel.id).group_by(StudentsAssessments.student_id,StudentModel.fname, StudentModel.lname ).order_by(StudentsAssessments.student_id).all()
+        scores = db.session.query(db.func.avg(StudentsAssessments.score), StudentsAssessments.student_id,StudentModel.fname, StudentModel.lname).join(StudentModel,StudentsAssessments.student_id == StudentModel.id).filter(TeacherModel.id== teacher_id).group_by(StudentsAssessments.student_id,StudentModel.fname, StudentModel.lname ).order_by(StudentsAssessments.student_id).all()
         
         scores_list = [{"id":score[1],"avg":round(score[0],2), "fname":score[2], "lname":score[3]} for score in scores]
 
