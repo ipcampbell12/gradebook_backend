@@ -49,7 +49,7 @@ class DeleteAsessment(MethodView):
     def delete(self, assessment_id,teacher_id):
         assessment = AssessmentModel.query.get_or_404(assessment_id)
 
-        sas = db.session.query(StudentsAssessments).filter(StudentsAssessments.assessment_id == assessment_id).filter(TeacherModel.id == teacher_id).all()
+        sas = db.session.query(StudentsAssessments).join(StudentModel, StudentsAssessments.student_id == StudentModel.id).join(TeacherModel,StudentModel.teacher_id == TeacherModel.id).filter(StudentsAssessments.assessment_id == assessment_id).filter(TeacherModel.id == teacher_id).all()
 
         for sa in sas:
             db.session.delete(sa)
