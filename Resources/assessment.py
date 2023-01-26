@@ -183,7 +183,9 @@ class AverageModuleScore(MethodView):
 
         students_assessments = db.session.query(db.func.avg(StudentsAssessments.score)).filter(StudentsAssessments.assessment_id == assessment_id).all()
 
-        average = [{"average":num[0]} for num in students_assessments ]
+        average = {"average":round(students_assessments[0][0],2)}
+        print(average)
+        # average = [{"average":num[0]} for num in scores ]
 
         return average
 
@@ -222,7 +224,9 @@ class AverageGrade(MethodView):
         
         scores = db.session.query(db.func.avg(StudentsAssessments.score)).all()
         
-        average = [{"average":num[0]} for num in scores ]
+        average = {"average":round(scores[0][0],2)}
+        print(average)
+        # average = [{"average":num[0]} for num in scores ]
 
         return average
 
