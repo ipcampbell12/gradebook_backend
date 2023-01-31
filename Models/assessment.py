@@ -10,6 +10,8 @@ class AssessmentModel(db.Model):
     # date = db.Column(db.DateTime, default=datetime.date)
     subject_id = db.Column(db.Integer, db.ForeignKey('subjects.id'),unique=False, nullable=False)
     scored= db.Column(db.Boolean, nullable=False, default=False )
+    possible = db.Column(db.Integer)
+    passing = db.Column(db.Integer)
 
     # one to many relationship with subject (child)
     subject = db.relationship("SubjectModel",back_populates="assessments")

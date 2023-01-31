@@ -35,6 +35,8 @@ class Assessment(MethodView):
             assessment.name = assessment_data["name"]
             assessment.subject_id = assessment_data["subject_id"]
             assessment.scored = assessment_data["scored"]
+            assessment.possible = assessment_data["possible"]
+            assessment.passing = assessment_data["passing"]
         else:
             assessment = AssessmentModel(id=assessment_id, **assessment_data)
         
