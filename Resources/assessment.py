@@ -206,23 +206,23 @@ class Grade(MethodView):
         return {"student":f"{student.fname}{student.lname}","overall_grade":average}
 
 
-@blp.route("/teacherstudents/<string:teacher_id>/grade")
+@blp.route("/teacherstudents/<string:teacher_id>/grade/<string:subject_id>")
 class Grades(MethodView):
 
-    def get(self, teacher_id):
+    def get(self, teacher_id, subject_id):
         
-        scores = db.session.query(db.func.avg(StudentsAssessments.score), StudentsAssessments.student_id,StudentModel.fname, StudentModel.lname).join(StudentModel,StudentsAssessments.student_id == StudentModel.id).filter(TeacherModel.id== teacher_id).group_by(StudentsAssessments.student_id,StudentModel.fname, StudentModel.lname ).order_by(StudentsAssessments.student_id).all()
+        scores = db.session.query(db.func.avg(StudentsAssessments.score), StudentsAssessments.student_id,StudentModel.fname, StudentModel.lname).join(StudentModel,StudentsAssessments.student_id == StudentModel.id).join(TeacherModel, StudentModel.teacher_id == TeacherModel.id).join(AssessmentModel, StudentsAssessments.assessment_id == AssessmentModel.id).join(SubjectModel, AssessmentModel.subject_id == SubjectModel.id).filter(SubjectModel.id == subject_id).filter(TeacherModel.id == teacher_id).group_by(StudentsAssessments.student_id,StudentModel.fname, StudentModel.lname ).order_by(StudentsAssessments.student_id).all()
         
         scores_list = [{"id":score[1],"avg":round(score[0],2), "fname":score[2], "lname":score[3]} for score in scores]
 
         return scores_list
 
-@blp.route("/teacherstudents/<string:teacher_id>/averagegrade")
+@blp.route("/teacherstudents/<string:teacher_id>/averagegrade/<string:subject_id>")
 class AverageGrade(MethodView):
 
-    def get(self, teacher_id):
+    def get(self, teacher_id, subject_id):
         
-        scores = db.session.query(db.func.avg(StudentsAssessments.score)).all()
+        scores = db.session.query(db.func.avg(StudentsAssessments.score)).join(StudentModel,StudentsAssessments.student_id == StudentModel.id).join(TeacherModel, StudentModel.teacher_id == TeacherModel.id).join(AssessmentModel, StudentsAssessments.assessment_id == AssessmentModel.id).join(SubjectModel, AssessmentModel.subject_id == SubjectModel.id).filter(SubjectModel.id == subject_id).filter(TeacherModel.id == teacher_id).all()
         
         average = {"average":round(scores[0][0],2)}
         print(average)
