@@ -43,13 +43,15 @@ class StudentSchema(PlainStudentSchema):
     #assessments = fields.List(fields.Nested(PlainAssessmentSchema()),dump_only=True)
 
 class AssessmentSchema(PlainAssessmentSchema):
+    teacher_id=fields.Int(required=True,load_only=True)
     subject_id=fields.Int(required=True,load_only=True)
     subject = fields.Nested(PlainSubjectSchema(),dump_only=True)
-    scored = fields.Bool(required=True)
+    # scored = fields.Bool(required=True)
     
     #students = fields.Nested(StudentSchema(),dump_only=True)
 
 class SubjectSchema(PlainSubjectSchema):
+    teacher_id = fields.Int(required=True,load_only=True)
     assessments = fields.List(fields.Nested(PlainAssessmentSchema(),dump_only=True))
     # grades = fields.List(fields.Nested(PlainSubjectSchema(),dump_only=True))
 
@@ -66,7 +68,7 @@ class StudentAndAssessmentSchema(Schema):
 
 
 # class TeacherAndAssessmentSchema(Schema):
-#     message = fields.Str()∂
+#     #message = fields.Str()
 #     teacher = fields.Nested(TeacherSchema)
 #     assessment = fields.Nested(AssessmentSchema)
 

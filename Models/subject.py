@@ -6,6 +6,9 @@ class SubjectModel(db.Model):
     id = db.Column(db.Integer, nullable=False, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
 
+    #one to many relationship with teachers (child)
+    teacher = db.relationship("TeacherModel",back_populates="subject",lazy="dynamic")
+
     #one to many relationship with assessments (parent)
     assessments = db.relationship("AssessmentModel",back_populates="subject",lazy="dynamic")
 

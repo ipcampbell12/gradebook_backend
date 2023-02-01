@@ -34,7 +34,6 @@ class Assessment(MethodView):
         if assessment:
             assessment.name = assessment_data["name"]
             assessment.subject_id = assessment_data["subject_id"]
-            assessment.scored = assessment_data["scored"]
             assessment.possible = assessment_data["possible"]
             assessment.passing = assessment_data["passing"]
         else:
@@ -64,11 +63,13 @@ class DeleteAsessment(MethodView):
 class AsessmentList(MethodView):
 
     # @jwt_required()
+    @blp.response(200, SubjectSchema)
     @blp.response(200,AssessmentSchema(many=True))
-    def get(self):
-        return AssessmentModel.query.all()
+    def get(self, teacher_id):
+        return AssessmentModel.join(SubjectModel, AssessmentModel.subject_id == SubjectModel.id).join(TeacherModel, SubjectModel.teacher_id == TeacherModel.id).filter(TeacherModel.id == teacher_id).query.all()
 
     # @jwt_required()
+    @blp.response(200, TeacherSchema)
     @blp.arguments(AssessmentSchema)
     @blp.response(200,AssessmentSchema)
     def post(self,assessment_data):
@@ -164,13 +165,14 @@ class StudentAssessmentList(MethodView):
 
         return student_assessment
 
-@blp.route("/student_assessment")
+@blp.route("/student_assessment/<string:teacher_id>")
 class OtherStudentAssessmentList(MethodView):
     
     # @jwt_required()
+    @blp.response(200, TeacherSchema)
     @blp.response(200,StudentAndAssessmentSchema(many=True))
-    def get(self):
-        students_assessments = db.session.query(StudentsAssessments).order_by(StudentsAssessments.student_id).all()
+    def get(self, teacher_id):
+        students_assessments = db.session.query(StudentsAssessments).join(StudentModel, StudentsAssessments.student_id == StudentModel.id).join(TeacherModel, StudentModel.teacher_id == TeacherModel.id).order_by(StudentsAssessments.student_id).all()
         return students_assessments
 
 #MAKE SURE YOU CHANGE YOUR ROUTE NAMES!!!!
@@ -198,7 +200,7 @@ class Grade(MethodView):
     # @jwt_required()
     def get(self,student_id):
         scores = db.session.query(StudentsAssessments.score).filter(StudentsAssessments.student_id == student_id).all()
-        
+ 
         student = StudentModel.query.get_or_404(student_id)
 
         scores_list = [score["score"] for score in scores]
