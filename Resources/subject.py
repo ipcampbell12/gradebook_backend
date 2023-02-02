@@ -51,7 +51,10 @@ class SubjectList(MethodView):
     @blp.response(200,SubjectSchema(many=True))
     def get(self,teacher_id):
         return SubjectModel.join(TeacherModel, SubjectModel.teacher_id == TeacherModel.id).filter(TeacherModel.id ==teacher_id).query.all()
-    
+
+@blp.route("/subject")
+class SubjectAdd(MethodView):
+
     # @jwt_required()
     @blp.arguments(SubjectSchema)
     @blp.response(200, SubjectSchema)

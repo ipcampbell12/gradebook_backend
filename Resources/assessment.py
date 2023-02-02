@@ -62,10 +62,10 @@ class DeleteAsessment(MethodView):
 class AsessmentList(MethodView):
 
     # @jwt_required()
-    @blp.response(200, SubjectSchema)
-    @blp.response(200,AssessmentSchema(many=True))
+    # @blp.response(200, SubjectSchema)
+    # @blp.response(200,AssessmentSchema(many=True))
     def get(self, teacher_id):
-        return AssessmentModel.join(SubjectModel, AssessmentModel.subject_id == SubjectModel.id).join(TeacherModel, SubjectModel.teacher_id == TeacherModel.id).filter(TeacherModel.id == teacher_id).query.all()
+        return AssessmentModel.join(TeacherModel, AssessmentModel.teacher_id == TeacherModel.id).filter(TeacherModel.id == teacher_id).query.all()
 
 @blp.route("/assessment")
 class AssessmentAdd(MethodView):

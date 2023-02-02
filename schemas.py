@@ -44,9 +44,10 @@ class StudentSchema(PlainStudentSchema):
 
 class AssessmentSchema(PlainAssessmentSchema):
     teacher_id=fields.Int(required=True,load_only=True)
-   # teacher = fields.Nested(TeacherSchema(),dump_only=True)
+    teacher = fields.Nested(TeacherSchema(),dump_only=True)
     subject_id=fields.Int(required=True,load_only=True)
-   # subject = fields.Nested(PlainSubjectSchema(),dump_only=True)
+    subject = fields.Nested(PlainSubjectSchema(),dump_only=True)
+    ssessments = fields.List(fields.Nested(PlainAssessmentSchema(),dump_only=True))
     # scored = fields.Bool(required=True)
     
     #students = fields.Nested(StudentSchema(),dump_only=True)
