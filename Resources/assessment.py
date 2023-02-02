@@ -58,14 +58,17 @@ class DeleteAsessment(MethodView):
         db.session.commit()
         return {"message":f"The assessment {assessment.name} was deleted."}
 
-@blp.route("/assessment/<string:teacher_id>")
+@blp.route("/teacherassessments/<string:teacher_id>")
 class AsessmentList(MethodView):
 
     # @jwt_required()
     # @blp.response(200, SubjectSchema)
-    # @blp.response(200,AssessmentSchema(many=True))
+    @blp.response(200, TeacherSchema)
+    @blp.response(200, AssessmentSchema(many=True))
     def get(self, teacher_id):
-        return AssessmentModel.join(TeacherModel, AssessmentModel.teacher_id == TeacherModel.id).filter(TeacherModel.id == teacher_id).query.all()
+        assessments = db.session.query(AssessmentModel).join(TeacherModel, AssessmentModel.teacher_id == TeacherModel.id).filter(TeacherModel.id == teacher_id).all()
+
+        return assessments 
 
 @blp.route("/assessment")
 class AssessmentAdd(MethodView):
