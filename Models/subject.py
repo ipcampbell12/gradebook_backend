@@ -7,8 +7,8 @@ class SubjectModel(db.Model):
     name = db.Column(db.String(80), nullable=False)
 
     #one to many relationship with teachers (child)
-    teacher = db.relationship("TeacherModel",back_populates="subject",lazy="dynamic")
-
+    teacher_id = db.Column(db.Integer, db.ForeignKey('teachers.id'),unique=False, nullable=False)
+    teacher = db.relationship("TeacherModel",back_populates="subjects")
     #one to many relationship with assessments (parent)
     assessments = db.relationship("AssessmentModel",back_populates="subject",lazy="dynamic")
 

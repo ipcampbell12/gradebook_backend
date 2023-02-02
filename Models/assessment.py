@@ -22,3 +22,4 @@ class AssessmentModel(db.Model):
 
     # one to many relationship with teachers (child)
     teacher_id = db.Column(db.Integer, db.ForeignKey('teachers.id'),unique=False, nullable=False)
+    teacher = db.relationship("TeacherModel",back_populates="assessments")

@@ -34,8 +34,7 @@ class Assessment(MethodView):
         if assessment:
             assessment.name = assessment_data["name"]
             assessment.subject_id = assessment_data["subject_id"]
-            assessment.possible = assessment_data["possible"]
-            assessment.passing = assessment_data["passing"]
+            assessment.teacher_id = assessment_data["teacher_id"]
         else:
             assessment = AssessmentModel(id=assessment_id, **assessment_data)
         
@@ -59,7 +58,7 @@ class DeleteAsessment(MethodView):
         db.session.commit()
         return {"message":f"The assessment {assessment.name} was deleted."}
 
-@blp.route("/assessment")
+@blp.route("/assessment/<string:teacher_id>")
 class AsessmentList(MethodView):
 
     # @jwt_required()
@@ -68,8 +67,10 @@ class AsessmentList(MethodView):
     def get(self, teacher_id):
         return AssessmentModel.join(SubjectModel, AssessmentModel.subject_id == SubjectModel.id).join(TeacherModel, SubjectModel.teacher_id == TeacherModel.id).filter(TeacherModel.id == teacher_id).query.all()
 
+@blp.route("/assessment")
+class AssessmentAdd(MethodView):
     # @jwt_required()
-    @blp.response(200, TeacherSchema)
+    #@blp.response(200, TeacherSchema)
     @blp.arguments(AssessmentSchema)
     @blp.response(200,AssessmentSchema)
     def post(self,assessment_data):
@@ -132,30 +133,30 @@ class AddAssessmentToStudent(MethodView):
         return student_assessment
     
 
-@blp.route("/student_assessment/<string:student_assessment_id>")
+@blp.route("/student_assessment/<string:student_assessment_id>/teacher/<string:teacher_id>")
 class StudentAssessmentList(MethodView):
 
     # @jwt_required()
-    @blp.response(200,StudentAndAssessmentSchema)
-    def get(self,student_assessment_id):
-        student_assessment = StudentsAssessments.query.get(student_assessment_id)
+    # @blp.response(200,StudentAndAssessmentSchema)
+    # def get(self,student_assessment_id):
+    #     student_assessment = StudentsAssessments.query.get(student_assessment_id)
 
-        return student_assessment
+    #     return student_assessment
 
-    # @jwt_required()
-    def delete(self, student_assessment_id):
-        student_assessment = StudentsAssessments.query.get(student_assessment_id)
+    # # @jwt_required()
+    # def delete(self, student_assessment_id):
+    #     student_assessment = StudentsAssessments.query.get(student_assessment_id)
 
-        db.session.delete(student_assessment)
-        db.session.commit()
+    #     db.session.delete(student_assessment)
+    #     db.session.commit()
 
-        return {"message": "This student_assessment was deleted"}
-
+    #     return {"message": "This student_assessment was deleted"}
+    
     # @jwt_required()
     @blp.arguments(StudentAndAssessmentSchema)
     @blp.response(200,StudentAndAssessmentSchema)
-    def put(self,data, student_assessment_id):
-        student_assessment = StudentsAssessments.query.get(student_assessment_id)
+    def put(self,data, student_assessment_id, teacher_id):
+        student_assessment = StudentsAssessments.join(AssessmentModel, StudentsAssessments.assessment_id == AssessmentModel.id).join(TeacherModel, AssessmentModel.teacher_id == TeacherModel.id).filter(TeacherModel.id == teacher_id).query.get(student_assessment_id)
 
         if student_assessment:
             student_assessment.score = data["score"]
@@ -177,15 +178,15 @@ class OtherStudentAssessmentList(MethodView):
 
 #MAKE SURE YOU CHANGE YOUR ROUTE NAMES!!!!
 #get scores by assessment
-@blp.route("/scoresbytest/<string:assessment_id>")
+@blp.route("/scoresbytest/<string:assessment_id>/teacher/<string:teacher_id>")
 class AverageModuleScore(MethodView):
     
     # @jwt_required()
     # @blp.response(200, AssessmentSchema)
     # @blp.response(200,StudentAndAssessmentSchema(many=True))
-    def get(self, assessment_id):
+    def get(self, assessment_id, teacher_id):
 
-        students_assessments = db.session.query(db.func.avg(StudentsAssessments.score)).filter(StudentsAssessments.assessment_id == assessment_id).all()
+        students_assessments = db.session.query(db.func.avg(StudentsAssessments.score)).filter(StudentsAssessments.assessment_id == assessment_id).join(StudentModel, StudentsAssessments.student_id == StudentModel.id).join(TeacherModel, StudentModel.teacher_id == TeacherModel.id).filter(TeacherModel.id == teacher_id).all()
 
         average = {"average":round(students_assessments[0][0],2)}
         print(average)
@@ -194,20 +195,20 @@ class AverageModuleScore(MethodView):
         return average
 
 
-@blp.route("/grade/<string:student_id>")
-class Grade(MethodView):
+# @blp.route("/grade/<string:student_id>")
+# class Grade(MethodView):
 
-    # @jwt_required()
-    def get(self,student_id):
-        scores = db.session.query(StudentsAssessments.score).filter(StudentsAssessments.student_id == student_id).all()
+#     # @jwt_required()
+#     def get(self,student_id):
+#         scores = db.session.query(StudentsAssessments.score).filter(StudentsAssessments.student_id == student_id).all()
  
-        student = StudentModel.query.get_or_404(student_id)
+#         student = StudentModel.query.get_or_404(student_id)
 
-        scores_list = [score["score"] for score in scores]
+#         scores_list = [score["score"] for score in scores]
         
-        average = round(sum(scores_list)/len(scores_list),1)
+#         average = round(sum(scores_list)/len(scores_list),1)
 
-        return {"student":f"{student.fname}{student.lname}","overall_grade":average}
+#         return {"student":f"{student.fname}{student.lname}","overall_grade":average}
 
 
 @blp.route("/teacherstudents/<string:teacher_id>/grade/<string:subject_id>")
