@@ -159,7 +159,13 @@ class StudentAssessmentList(MethodView):
     @blp.arguments(StudentAndAssessmentSchema)
     @blp.response(200,StudentAndAssessmentSchema)
     def put(self,data, student_assessment_id, teacher_id):
-        student_assessment = StudentsAssessments.join(AssessmentModel, StudentsAssessments.assessment_id == AssessmentModel.id).join(TeacherModel, AssessmentModel.teacher_id == TeacherModel.id).filter(TeacherModel.id == teacher_id).query.get(student_assessment_id)
+
+        print(student_assessment_id)
+        print(teacher_id)
+
+        student_assessment = db.session.query(StudentsAssessments).join(AssessmentModel, StudentsAssessments.assessment_id == AssessmentModel.id).join(TeacherModel, AssessmentModel.teacher_id == TeacherModel.id).filter(StudentsAssessments.id == student_assessment_id).filter(TeacherModel.id == teacher_id)
+
+        print(student_assessment)
 
         if student_assessment:
             student_assessment.score = data["score"]

@@ -12,6 +12,7 @@ class StudentModel(db.Model):
     teacher = db.relationship("TeacherModel",back_populates="students")
     
     assessments = db.relationship("StudentsAssessments",back_populates="student")
+    #Should that be "students" instead of "student"?
 
     # # one ot many relationship with grades (parent)
     # grades = db.relationship("GradeModel", back_populates="student", cascade="all,delete")

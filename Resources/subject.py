@@ -7,7 +7,7 @@ from flask_jwt_extended import jwt_required
 
 from db import db
 from Models import SubjectModel, TeacherModel
-from schemas import SubjectSchema
+from schemas import SubjectSchema, TeacherSchema
 
 blp = Blueprint("SubjectModel",__name__,description="Operations on subjects")
 
@@ -44,13 +44,16 @@ class Subject(MethodView):
 
         return subject
 
-@blp.route("/subject/<string:teacher_id>")
+@blp.route("/teachersubjects/<string:teacher_id>")
 class SubjectList(MethodView):
 
     # @jwt_required()
+    @blp.response(200, TeacherSchema)
     @blp.response(200,SubjectSchema(many=True))
     def get(self,teacher_id):
-        return SubjectModel.join(TeacherModel, SubjectModel.teacher_id == TeacherModel.id).filter(TeacherModel.id ==teacher_id).query.all()
+        subjects = db.session.query(SubjectModel).join(TeacherModel, SubjectModel.teacher_id == TeacherModel.id).filter(TeacherModel.id == teacher_id).all()
+
+        return subjects 
 
 @blp.route("/subject")
 class SubjectAdd(MethodView):
