@@ -51,6 +51,8 @@ class DeleteAsessment(MethodView):
 
         sas = db.session.query(StudentsAssessments).join(StudentModel, StudentsAssessments.student_id == StudentModel.id).join(TeacherModel,StudentModel.teacher_id == TeacherModel.id).filter(StudentsAssessments.assessment_id == assessment_id).filter(TeacherModel.id == teacher_id).all()
 
+        #print(sas)
+
         for sa in sas:
             db.session.delete(sa)
 
@@ -140,23 +142,6 @@ class AddAssessmentToStudent(MethodView):
 class StudentAssessmentList(MethodView):
 
     # @jwt_required()
-    # @blp.response(200,StudentAndAssessmentSchema)
-    # def get(self,student_assessment_id):
-    #     student_assessment = StudentsAssessments.query.get(student_assessment_id)
-
-    #     return student_assessment
-
-    # # @jwt_required()
-    # def delete(self, student_assessment_id):
-    #     student_assessment = StudentsAssessments.query.get(student_assessment_id)
-
-    #     db.session.delete(student_assessment)
-    #     db.session.commit()
-
-    #     return {"message": "This student_assessment was deleted"}
-    
-    # @jwt_required()
-   
     @blp.arguments(StudentAndAssessmentSchema)
     @blp.response(200,StudentAndAssessmentSchema)
     def put(self,data, student_assessment_id):

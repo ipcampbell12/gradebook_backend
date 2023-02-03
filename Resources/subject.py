@@ -6,7 +6,7 @@ from flask_jwt_extended import jwt_required
 
 
 from db import db
-from Models import SubjectModel, TeacherModel
+from Models import SubjectModel, TeacherModel, AssessmentModel, StudentsAssessments
 from schemas import SubjectSchema, TeacherSchema
 
 blp = Blueprint("SubjectModel",__name__,description="Operations on subjects")
@@ -19,14 +19,6 @@ class Subject(MethodView):
     def get(self,subject_id):
         subject = SubjectModel.query.get_or_404(subject_id)
         return subject
-    
-    # @jwt_required()
-    def delete(self, subject_id):
-        subject = SubjectModel.query.get_or_404(subject_id)
-
-        db.session.delete(subject)
-        db.session.commit()
-        return {"message":f"The subject {subject.name} was deleted."}
     
     # @jwt_required()
     @blp.arguments(SubjectSchema)
@@ -43,6 +35,28 @@ class Subject(MethodView):
         db.session.commit()
 
         return subject
+
+@blp.route("/subject/<string:subject_id>/")
+class SubjectDelete(MethodView):
+
+     # @jwt_required()
+    def delete(self, subject_id):
+        subject = SubjectModel.query.get_or_404(subject_id)
+
+        tests = db.session.query(AssessmentModel).filter(AssessmentModel.subject_id == subject_id).all()
+
+        sas = db.session.query(StudentsAssessments).filter(SubjectModel.id == subject_id).filter(AssessmentModel.subject_id == subject_id).filter(StudentsAssessments.assessment_id == AssessmentModel.id).all()
+
+        for a in tests:
+            db.session.delete(a)
+
+        for sa in sas:
+            db.session.delete(sa)
+
+        db.session.delete(subject)
+        db.session.commit()
+        return {"message":f"The subject {subject.name} was deleted."}
+    
 
 @blp.route("/teachersubjects/<string:teacher_id>")
 class SubjectList(MethodView):
