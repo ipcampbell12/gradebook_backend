@@ -136,7 +136,7 @@ class AddAssessmentToStudent(MethodView):
         return student_assessment
     
 
-@blp.route("/student_assessment/<string:student_assessment_id>/teacher/<string:teacher_id>")
+@blp.route("/student_assessment/<string:student_assessment_id>")
 class StudentAssessmentList(MethodView):
 
     # @jwt_required()
@@ -156,16 +156,12 @@ class StudentAssessmentList(MethodView):
     #     return {"message": "This student_assessment was deleted"}
     
     # @jwt_required()
+   
     @blp.arguments(StudentAndAssessmentSchema)
     @blp.response(200,StudentAndAssessmentSchema)
-    def put(self,data, student_assessment_id, teacher_id):
+    def put(self,data, student_assessment_id):
 
-        print(student_assessment_id)
-        print(teacher_id)
-
-        student_assessment = db.session.query(StudentsAssessments).join(AssessmentModel, StudentsAssessments.assessment_id == AssessmentModel.id).join(TeacherModel, AssessmentModel.teacher_id == TeacherModel.id).filter(StudentsAssessments.id == student_assessment_id).filter(TeacherModel.id == teacher_id)
-
-        print(student_assessment)
+        student_assessment = db.session.query(StudentsAssessments).filter(StudentsAssessments.id == student_assessment_id).first()
 
         if student_assessment:
             student_assessment.score = data["score"]
