@@ -1,18 +1,21 @@
-from os import environ, path
+import os
 from dotenv import load_dotenv
 
 
 
 # path to current file
-basedir = path.abspath(path.dirname(__file__))
+# basedir = path.abspath(path.dirname(__file__))
 
 # loads variable data stored in .env file
-load_dotenv(path.join(basedir, '.env'))
+
 
 
 class Config: 
-    SECRET_KEY = environ.get('SECRET KEY')
-    SQLALCHEMY_DATABASE_URI = environ.get("DATABASE_URL",'sqlite:///gradebook.db')
+    db_url=None
+    load_dotenv()
+
+    SECRET_KEY = os.environ.get('SECRET KEY')
+    SQLALCHEMY_DATABASE_URI = db_url or os.getenv('DATABASE_URL','sqlite:///gradebook.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     API_TITLE = "Stores REST API"
     API_VERSION = "v1"
@@ -30,3 +33,6 @@ class ProdConfig(Config):
 class DevConfig(Config):
     FLASK_ENV = 'development'
     DEBUG = True
+
+
+        

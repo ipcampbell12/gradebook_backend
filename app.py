@@ -5,8 +5,8 @@ from flask_smorest import Api
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 from flask_migrate import Migrate
-from dotenv import load_dotenv
-from instance.config import Config
+# from dotenv import load_dotenv
+from config import Config
 
 
 from Resources.teacher import blp as TeacherBlueprint
@@ -23,7 +23,7 @@ import Models
 # takes a configurationa and file and creates a new app
 def create_app(Config):
     app = Flask(__name__)
-    load_dotenv()
+    # load_dotenv()
 
     #need this in order to make data able to be fetched to front end
     CORS(app)
