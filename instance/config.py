@@ -1,10 +1,10 @@
 import os
 from dotenv import load_dotenv
-
+from os import path
 
 
 # path to current file
-# basedir = path.abspath(path.dirname(__file__))
+basedir = path.abspath(path.dirname(__file__))
 
 # loads variable data stored in .env file
 
