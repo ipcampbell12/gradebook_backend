@@ -11,11 +11,11 @@ from dotenv import load_dotenv
 
 
 class Config: 
-    db_url=None
+    
     load_dotenv()
 
     SECRET_KEY = os.environ.get('SECRET KEY')
-    SQLALCHEMY_DATABASE_URI = db_url or os.getenv('DATABASE_URL','sqlite:///gradebook.db')
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     API_TITLE = "Stores REST API"
     API_VERSION = "v1"
