@@ -1,6 +1,6 @@
 from app import create_app
 from dotenv import load_dotenv
-from config import Config
+from instance.config import Config
 
 app = create_app(Config)
 

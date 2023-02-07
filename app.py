@@ -6,7 +6,7 @@ from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 from flask_migrate import Migrate
 # from dotenv import load_dotenv
-from config import Config
+from instance.config import Config
 
 
 from Resources.teacher import blp as TeacherBlueprint
