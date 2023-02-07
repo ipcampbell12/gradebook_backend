@@ -12,4 +12,4 @@ COPY . .
 #what commands should run
 #each string is one part of comamand
 #allows external container to make request to flask app running in container
-CMD ["flask","run","--host","0.0.0.0"]
+CMD ["/bin/bash","docker-entrypoint.sh"]

@@ -67,7 +67,6 @@ def run_migrations_offline():
     context.configure(
         url=url, target_metadata=get_metadata(), literal_binds=True
     )
-
     with context.begin_transaction():
         context.run_migrations()
 
