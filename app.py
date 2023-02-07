@@ -21,7 +21,7 @@ import Models
 
 #allows you to parse config file
 # takes a configurationa and file and creates a new app
-def create_app(Config):
+def create_app(config):
     app = Flask(__name__)
     # load_dotenv()
 
@@ -29,7 +29,7 @@ def create_app(Config):
     CORS(app)
 
     
-    app.config.from_object(Config)
+    app.config.from_object(config)
 
     db.init_app(app)
 
