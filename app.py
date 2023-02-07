@@ -18,19 +18,18 @@ from instance.blocklist import BLOCKLIST
 
 from db import db
 import Models 
+cors = CORS()
 
 #allows you to parse config file
 # takes a configurationa and file and creates a new app
 def create_app(config):
     app = Flask(__name__)
+    app.config.from_object(config)
     # load_dotenv()
 
     #need this in order to make data able to be fetched to front end
-    CORS(app)
-
     
-    app.config.from_object(config)
-
+    cors.init_app(app)
     db.init_app(app)
 
     migrate = Migrate(app, db)
