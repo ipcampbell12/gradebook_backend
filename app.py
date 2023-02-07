@@ -7,6 +7,7 @@ from flask_cors import CORS
 from flask_migrate import Migrate
 # from dotenv import load_dotenv
 from instance.config import Config, ProdConfig
+import instance.config
 
 
 from Resources.teacher import blp as TeacherBlueprint
@@ -103,4 +104,4 @@ def create_app(config):
 
 
 
-app = create_app(ProdConfig)
+app = create_app(instance.config)
