@@ -6,7 +6,7 @@ from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 from flask_migrate import Migrate
 # from dotenv import load_dotenv
-from instance.config import Config
+from instance.config import Config, ProdConfig
 
 
 from Resources.teacher import blp as TeacherBlueprint
@@ -104,4 +104,4 @@ def create_app(config):
 
 
 
-# app = create_app(Config)
+app = create_app(ProdConfig)
