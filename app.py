@@ -104,4 +104,4 @@ def create_app(config):
 
 
 
-app = create_app(Config)
+#app = create_app(Config)
