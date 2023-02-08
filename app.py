@@ -6,7 +6,7 @@ from flask_smorest import Api
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 from flask_migrate import Migrate
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 # from instance.config import Config, ProdConfig
 # import instance.config
 
@@ -23,13 +23,11 @@ from Resources.subject import blp as SubjectBlueprint
 
 
 
-migrate = Migrate()
-jwt = JWTManager()
 cors = CORS()
 
 #allows you to parse config file
 # takes a configurationa and file and creates a new app
-def create_app():
+def create_app(db_url=None):
     app = Flask(__name__)
     # load_dotenv()
     # app.config.from_object(config)
@@ -53,8 +51,8 @@ def create_app():
 
     cors.init_app(app)
     db.init_app(app)
-    migrate.init_app(app,db)
-   
+
+    migrate = Migrate(app, db)
  
     api = Api(app)
 
