@@ -1,4 +1,4 @@
-from project import create_app
+from app import create_app
 from dotenv import load_dotenv
 from instance.config import Config
 
