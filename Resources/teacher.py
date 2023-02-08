@@ -67,17 +67,22 @@ class TeachersList(MethodView):
         teacher = TeacherModel(
             fname= teacher_data["fname"],
             lname=teacher_data["lname"],
-             username=teacher_data["username"],
-             password=pbkdf2_sha256.hash(teacher_data["password"])
-             )
-        
+            username=teacher_data["username"],
+            password=pbkdf2_sha256.hash(teacher_data["password"])
+            )
+       
         try: 
             db.session.add(teacher)
+            print(teacher)
             db.session.commit()
+            print("The teacher was created")
         except IntegrityError:
             abort(400, "A teacher with this name already exists")
+            
         except SQLAlchemyError:
+            print("There was a problem")
             abort(500, "There was an error when adding this teacher")
+            
 
         return {"message":f"The teacher accoutn for {teacher} was created successfully"}, 201
     

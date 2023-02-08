@@ -11,7 +11,7 @@ class StudentModel(db.Model):
     #one to many relationship with teachers (child)
     teacher = db.relationship("TeacherModel",back_populates="students")
     
-    assessments = db.relationship("StudentsAssessments",back_populates="students")
+    assessments = db.relationship("StudentsAssessments",back_populates="student")
     #Should that be "students" instead of "student"?
 
     # # one ot many relationship with grades (parent)
