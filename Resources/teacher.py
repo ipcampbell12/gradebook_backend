@@ -61,14 +61,14 @@ class TeachersList(MethodView):
     @blp.response(200,TeacherSchema)
     def post(self, teacher_data):
         
-        if TeacherModel.query.filter(TeacherModel.username == teacher_data["username"]).first():
-            abort(409, message="A user with that username already exists")
+        # if TeacherModel.query.filter(TeacherModel.username == teacher_data["username"]).first():
+        #     abort(409, message="A user with that username already exists")
 
         teacher = TeacherModel(
             fname= teacher_data["fname"],
-            lname=teacher_data["lname"],
-            username=teacher_data["username"],
-            password=pbkdf2_sha256.hash(teacher_data["password"])
+            lname=teacher_data["lname"]
+            # username=teacher_data["username"],
+            # password=pbkdf2_sha256.hash(teacher_data["password"])
             )
        
         try: 

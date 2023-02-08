@@ -8,8 +8,8 @@ class TeacherModel(db.Model):
     lname = db.Column(db.String(80), unique=False, nullable=False)
 
      # assessments = db.relationship("AssessmentModel",back_populates="teachers",secondary="teachers_assessments")
-    username = db.Column(db.String(80), nullable=False)
-    password = db.Column(db.String(80), nullable=False)
+    # username = db.Column(db.String(80), nullable=False)
+    # password = db.Column(db.String(80), nullable=False)
 
 
     #one to many relationship with subjects (parent)

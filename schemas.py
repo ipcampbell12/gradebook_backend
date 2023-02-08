@@ -5,8 +5,8 @@ class TeacherSchema(Schema):
     id = fields.Int(dump_only=True)
     fname = fields.Str(required=True)
     lname = fields.Str(required=True)
-    username = fields.Str(required=True)
-    password = fields.Str(required=True, load_only=True)
+    # username = fields.Str(required=True)
+    # password = fields.Str(required=True, load_only=True)
 
 class LoginSchema(Schema):
     username = fields.Str(required=True)
