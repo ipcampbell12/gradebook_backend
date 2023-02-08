@@ -121,9 +121,10 @@ def create_app(db_url=None):
     api.register_blueprint(AssessmentBlueprint)
     api.register_blueprint(SubjectBlueprint)
 
+    db.create_all()
     return app
 
 
 
 
-app=create_app()
+
