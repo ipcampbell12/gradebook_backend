@@ -29,7 +29,7 @@ cors = CORS()
 
 #allows you to parse config file
 # takes a configurationa and file and creates a new app
-def create_app(db_url=None):
+def create_app():
     app = Flask(__name__)
     # load_dotenv()
     # app.config.from_object(config)
