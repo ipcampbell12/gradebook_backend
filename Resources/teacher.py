@@ -70,7 +70,7 @@ class TeachersList(MethodView):
              username=teacher_data["username"],
              password=pbkdf2_sha256.hash(teacher_data["password"])
              )
-
+        
         try: 
             db.session.add(teacher)
             db.session.commit()

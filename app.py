@@ -6,7 +6,7 @@ from flask_smorest import Api
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 from flask_migrate import Migrate
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 # from instance.config import Config, ProdConfig
 # import instance.config
 
@@ -23,20 +23,23 @@ from Resources.subject import blp as SubjectBlueprint
 
 
 
+migrate = Migrate()
+jwt = JWTManager()
 cors = CORS()
 
 #allows you to parse config file
 # takes a configurationa and file and creates a new app
 def create_app(db_url=None):
     app = Flask(__name__)
-    load_dotenv()
+    # load_dotenv()
     # app.config.from_object(config)
     
 
     #need this in order to make data able to be fetched to front end
     
      #configuration variables
-   
+
+    app.config["SECRET_KEY"] = os.environ.get('SECRET_KEY')
     app.config["API_TITLE"] = "Stores REST API"
     app.config['API_VERSION'] = "v1"
     app.config['OPENAPI_VERSION'] = '3.0.3'
@@ -44,14 +47,15 @@ def create_app(db_url=None):
     app.config["OPENAPI_SWAGGER_UI_PATH"] = "/swagger-ui"
     app.config["OPENAPI_SWAGGER_UI_URL"] = "https://cdn.jsdelivr.net/npm/swagger-ui-dist/"
     #if db_url exists, use that, otherwise, use the next one
-    app.config['SQLALCHEMY_DATABASE_URI'] = db_url or os.getenv("DATABASE_URL","sqlite:///data.db")
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
     app.config["PROPAGATE_EXCEPTIONS"] = True
 
     cors.init_app(app)
     db.init_app(app)
-
-    migrate = Migrate(app, db)
+    migrate.init_app(app,db)
+   
+ 
     api = Api(app)
 
     app.config["JWT_SECRET_KEY"] = '157481405834678672455234309838136777491'
