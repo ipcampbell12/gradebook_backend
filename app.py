@@ -22,7 +22,8 @@ from Resources.subject import blp as SubjectBlueprint
 
 
 
-
+migrate = Migrate()
+jwt = JWTManager()
 cors = CORS()
 
 #allows you to parse config file
@@ -49,10 +50,9 @@ def create_app(db_url=None):
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
     app.config["PROPAGATE_EXCEPTIONS"] = True
 
-    cors.init_app(app)
     db.init_app(app)
-
-    migrate = Migrate(app, db)
+    cors.init_app(app)
+    migrate.init_app(app, db)
  
     api = Api(app)
 
@@ -126,4 +126,4 @@ def create_app(db_url=None):
 
 
 
-# app=create_app()
+app=create_app()
