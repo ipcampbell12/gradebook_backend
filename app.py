@@ -126,4 +126,4 @@ def create_app(db_url=None):
 
 
 
-app=create_app()
+# app=create_app()
