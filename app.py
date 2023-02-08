@@ -123,6 +123,8 @@ def create_app(db_url=None):
     api.register_blueprint(AssessmentBlueprint)
     api.register_blueprint(SubjectBlueprint)
 
+    return app
+
     
 
 
