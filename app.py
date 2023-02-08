@@ -1,40 +1,60 @@
 import os 
+import secrets
 
 from flask import Flask, jsonify
 from flask_smorest import Api
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 from flask_migrate import Migrate
-# from dotenv import load_dotenv
-from instance.config import Config, ProdConfig
-import instance.config
+from dotenv import load_dotenv
+# from instance.config import Config, ProdConfig
+# import instance.config
 
+
+from db import db
+from instance.blocklist import BLOCKLIST
+import Models 
 
 from Resources.teacher import blp as TeacherBlueprint
 from Resources.student import blp as StudentBlueprint
 from Resources.assessment import blp as AssessmentBlueprint
 from Resources.subject import blp as SubjectBlueprint
-from instance.blocklist import BLOCKLIST
 
 
-from db import db
-import Models 
+
+
 cors = CORS()
 
 #allows you to parse config file
 # takes a configurationa and file and creates a new app
-def create_app(config):
+def create_app(db_url=None):
     app = Flask(__name__)
-    app.config.from_object(config)
-    # load_dotenv()
+    load_dotenv()
+    # app.config.from_object(config)
+    
 
     #need this in order to make data able to be fetched to front end
     
+     #configuration variables
+   
+    app.config["API_TITLE"] = "Stores REST API"
+    app.config['API_VERSION'] = "v1"
+    app.config['OPENAPI_VERSION'] = '3.0.3'
+    app.config['OPENAPI_URL_PREFIX'] = '/'
+    app.config["OPENAPI_SWAGGER_UI_PATH"] = "/swagger-ui"
+    app.config["OPENAPI_SWAGGER_UI_URL"] = "https://cdn.jsdelivr.net/npm/swagger-ui-dist/"
+    #if db_url exists, use that, otherwise, use the next one
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_url or os.getenv("DATABASE_URL","sqlite:///data.db")
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
+    app.config["PROPAGATE_EXCEPTIONS"] = True
+
     cors.init_app(app)
     db.init_app(app)
 
     migrate = Migrate(app, db)
     api = Api(app)
+
+    app.config["JWT_SECRET_KEY"] = '157481405834678672455234309838136777491'
 
     jwt = JWTManager(app)
 
@@ -104,4 +124,4 @@ def create_app(config):
 
 
 
-app = create_app(Config)
+# app = create_app(Config)
